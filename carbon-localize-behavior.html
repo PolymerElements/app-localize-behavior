@@ -1,0 +1,159 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<script src="../intl-messageformat/dist/intl-messageformat.min.js"></script>
+
+<script>
+
+/**
+* `Polymer.CarbonLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
+* help you internationalize your application. Note that if you're on a browser that
+* does not natively support the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+* object, you must load the polyfill yourself. An example polyfill can
+* be found [here](https://github.com/andyearnshaw/Intl.js/).
+*
+* Sample use:
+*
+*     <dom-module id="x-app">
+*        <template>
+*         <div>{{localize('hello', 'Batman')}}</div>
+*        </template>
+*        <script>
+*           Polymer({
+*             is: "x-app",
+*
+*             behaviors: [
+*               Polymer.CarbonLocalizeBehavior
+*             ],
+*
+*           ready: function() {
+*             this.resources = {
+*               'en': { 'hello': 'My name is {name}'. },
+*               'fr': { 'hello': 'Je m'apelle {name}'. }
+*             };
+*
+*             this.language = 'en';
+*            }
+*           });
+*        &lt;/script>
+*     </dom-module>
+*
+* @polymerBehavior Polymer.CarbonLocalizeBehavior
+*/
+Polymer.CarbonLocalizeBehavior = {
+  properties: {
+    /**
+     * The language used for translation.
+     */
+    language: {
+      type: String
+    },
+
+    /**
+     * The dictionary of localized messages, for each of the languages that
+     * are going to be used. See http://formatjs.io/guides/message-syntax/ for
+     * more information on the message syntax.
+     *
+     * For example, a valid dictionary would be:
+     * this.resources = {
+     *  'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
+     * }
+     */
+    resources: {
+      type: Object
+    },
+
+    /**
+     * The path to the dictionary of localized messages. The format is the
+     * same as the `resources` array, only saved as an external json file.
+     * Note that using a path will populate the `resources` property, and override
+     * the previous data.
+     */
+    pathToResources: {
+      type: String
+    },
+
+    /**
+     * Optional dictionary of user defined formats, as explained here:
+     * http://formatjs.io/guides/message-syntax/#custom-formats
+     *
+     * For example, a valid dictionary of formats would be:
+     * this.formats = {
+     *    number: { USD: { style: 'currency', currency: 'USD' } }
+     * }
+     */
+    formats: {
+      type: Object,
+      observer: '__updateLanguage'
+    },
+
+    /**
+     * Translates a string to the current `language`. Any parameters to the
+     * string should be passed in order, as follows:
+     * `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
+     */
+    localize: {
+      computed: '__computeLocalize(language, resources)'
+    }
+  },
+
+  loadResources: function(path) {
+    if (!this.__request) {
+      this.__request = document.createElement('iron-ajax');
+      this.__request.url = path;
+      this.__request.handleAs = 'json';
+
+      var self = this;
+      this.__request.addEventListener('response', function(event) {
+        self.resources = this.lastResponse;
+      });
+      this.__request.addEventListener('error', function(event) {
+        console.error('Could not load ' + path);
+      });
+      this.__request.generateRequest();
+
+    }
+  },
+
+  /**
+   * Returns a computed `localize` method, based on the current `language`.
+   */
+  __computeLocalize: function(language, resources) {
+    return function() {
+      var key = arguments[0];
+      if (!key || !this.resources || !this.language)
+        return;
+
+      var msg = new IntlMessageFormat(this.resources[this.language][key], this.language, this.formats);
+
+      var args = {};
+      for (var i = 1; i < arguments.length; i+=2) {
+        args[arguments[i]] = arguments[i+1];
+      }
+
+      return msg.format(args);
+    }
+  },
+
+  /**
+   * The `localize` method is only computed when the `language` or `resources` change,
+   * But we might need to re-compute it when an optional dependency, like `formats`
+   * changes.
+   */
+  __updateLanguage: function() {
+    var temp = this.language;
+    this.language = undefined;
+    this.language = temp;
+  }
+}
+
+</script>
