@@ -1,1 +1,1 @@
-# carbon-translate-behavior
+# carbon-localize-behavior
