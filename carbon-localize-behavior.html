@@ -54,6 +54,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 * @polymerBehavior Polymer.CarbonLocalizeBehavior
 */
 Polymer.CarbonLocalizeBehavior = {
+  /**
+   * If the element is using `pathToResources` to load an external resources
+   * file, fired when the file has been loaded.
+   *
+   * @event carbon-resources-loaded
+   */
+
+  /**
+   * If the element is using `pathToResources` to load an external resources
+   * file, fired when the file cannot be loaded due to an error.
+   *
+   * @event carbon-resources-error
+   */
+
   properties: {
     /**
      * The language used for translation.
@@ -111,19 +125,31 @@ Polymer.CarbonLocalizeBehavior = {
   },
 
   loadResources: function(path) {
-    if (!this.__request) {
-      this.__request = document.createElement('iron-ajax');
-      this.__request.url = path;
-      this.__request.handleAs = 'json';
+    // Cache requests for the same file, and use them if possible.
+    if (!Polymer.Base.__localizeBehaviorCache)
+      Polymer.Base.__localizeBehaviorCache = {};
 
-      var self = this;
-      this.__request.addEventListener('response', function(event) {
-        self.resources = this.lastResponse;
-      });
-      this.__request.addEventListener('error', function(event) {
-        console.error('Could not load ' + path);
-      });
-      this.__request.generateRequest();
+    var request = Polymer.Base.__localizeBehaviorCache[path];
+
+    if (!request) {
+      request = document.createElement('iron-ajax');
+      Polymer.Base.__localizeBehaviorCache[path] = request;
+
+      request.addEventListener('response', this.__onRequestResponse.bind(this));
+      request.addEventListener('error', this.__onRequestError.bind(this));
+
+      request.url = path;
+      request.handleAs = 'json';
+      request.generateRequest();
+    } else {
+      // Re-use the already cached resources. If the last response is null,
+      // it could be because the request is already in flight, but hasn't completed.
+      if (!request.lastResponse) {
+        request.addEventListener('response', this.__onRequestResponse.bind(this));
+        request.addEventListener('error', this.__onRequestError.bind(this));
+      } else {
+        this.resources = request.lastResponse;
+      }
     }
   },
 
@@ -145,6 +171,15 @@ Polymer.CarbonLocalizeBehavior = {
 
       return msg.format(args);
     }
+  },
+
+  __onRequestResponse: function(event) {
+    this.resources = event.target.lastResponse;
+    this.fire('carbon-resources-loaded');
+  },
+
+  __onRequestError: function(event) {
+    this.fire('carbon-resources-error');
   }
 }
 

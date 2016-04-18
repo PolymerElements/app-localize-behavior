@@ -11,14 +11,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../carbon-localize-behavior.html">
 
-<dom-module id="x-translate">
+<dom-module id="x-translate2">
   <template>
-    <div id="output">{{localize('greeting')}}</div>
+    <div id="output">{{localize('intro', 'name', 'batman', 'numCats', 3)}}</div>
   </template>
 
   <script>
     Polymer({
-      is: "x-translate",
+      is: "x-translate2",
 
       behaviors: [
         Polymer.CarbonLocalizeBehavior
@@ -34,10 +34,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return {
               'en': {
-                'greeting': 'hello'
+                'intro': 'my name is {name}. i have {numCats, number} cats.'
               },
               'fr' : {
-                'greeting': 'bonjour'
+                'intro': 'je m\'apelle {name}. j\'ai {numCats, number} chats.'
               }
             };
           }
