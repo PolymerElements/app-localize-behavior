@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="x-translate.html">
+  <link rel="import" href="x-translate2.html">
 
 </head>
 <body>
@@ -31,17 +32,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="interpolated">
+    <template>
+      <x-translate2></x-translate2>
+    </template>
+  </test-fixture>
+
   <script>
 
     suite('basic', function() {
-      var app;
-
-      setup(function() {
-        app = fixture('basic');
-      });
-
       test('can translate a basic string', function() {
-        var input = fixture('basic');
+        var app = fixture('basic');
 
         assert.equal(app.language, 'en');
         assert.equal(app.$.output.innerHTML, 'hello');
@@ -51,9 +52,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(app.$.output.innerHTML, 'bonjour');
       });
 
+      test('can translate a string with a parameter', function() {
+        var app = fixture('interpolated');
+
+        assert.equal(app.language, 'en');
+        assert.equal(app.$.output.innerHTML, 'my name is batman. i have 3 cats.');
+
+        app.language = 'fr';
+        assert.equal(app.language, 'fr');
+        assert.equal(app.$.output.innerHTML, 'je m\'apelle batman. j\'ai 3 chats.');
+      });
+
+      test('can translate strings imperatively', function() {
+        var app1 = fixture('basic');
+        var app2 = fixture('interpolated');
+
+        assert.equal(app1.language, 'en');
+        assert.equal(app2.language, 'en');
+        assert.equal(app1.localize('greeting'), 'hello');
+        assert.equal(app2.localize('intro', 'name', 'robin', 'numCats', 17), 'my name is robin. i have 17 cats.');
+
+        app1.language = app2.language = 'fr';
+        assert.equal(app1.language, 'fr');
+        assert.equal(app2.language, 'fr');
+        assert.equal(app1.localize('greeting'), 'bonjour');
+        assert.equal(app2.localize('intro', 'name', 'robin', 'numCats', 17), 'je m\'apelle robin. j\'ai 17 chats.');
+      });
+    });
+
+    suite('external resources', function() {
       test('can translate a basic string from external resources', function() {
-        var input = fixture('basic');
-        input.loadResources('locales.json');
+        var app = fixture('basic');
+        app.loadResources('locales.json');
 
         Polymer.Base.async(function() {
           assert.equal(app.language, 'en');
@@ -64,9 +94,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(app.$.output.innerHTML, 'bonjour');
         }, 1);
       });
+
+      test('can translate a string with a parameter', function() {
+        var app = fixture('interpolated');
+        app.loadResources('locales.json');
+
+        assert.equal(app.language, 'en');
+        assert.equal(app.$.output.innerHTML, 'my name is batman. i have 3 cats.');
+
+        app.language = 'fr';
+        assert.equal(app.language, 'fr');
+        assert.equal(app.$.output.innerHTML, 'je m\'apelle batman. j\'ai 3 chats.');
+      });
+
+      test('can translate strings imperatively', function() {
+        var app1 = fixture('basic');
+        var app2 = fixture('interpolated');
+        app1.loadResources('locales.json');
+        app2.loadResources('locales.json');
+
+        assert.equal(app1.language, 'en');
+        assert.equal(app2.language, 'en');
+        assert.equal(app1.localize('greeting'), 'hello');
+        assert.equal(app2.localize('intro', 'name', 'robin', 'numCats', 17), 'my name is robin. i have 17 cats.');
+
+        app1.language = app2.language = 'fr';
+        assert.equal(app1.language, 'fr');
+        assert.equal(app2.language, 'fr');
+        assert.equal(app1.localize('greeting'), 'bonjour');
+        assert.equal(app2.localize('intro', 'name', 'robin', 'numCats', 17), 'je m\'apelle robin. j\'ai 17 chats.');
+      });
     });
 
   </script>
-
 </body>
 </html>
