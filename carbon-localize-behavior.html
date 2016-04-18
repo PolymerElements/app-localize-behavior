@@ -35,14 +35,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 *               Polymer.CarbonLocalizeBehavior
 *             ],
 *
-*           ready: function() {
-*             this.resources = {
-*               'en': { 'hello': 'My name is {name}'. },
-*               'fr': { 'hello': 'Je m'apelle {name}'. }
-*             };
-*
-*             this.language = 'en';
-*            }
+*             properties: {
+*               language: {
+*                 value: 'en'
+*               },
+*               resources: {
+*                 value: function() {
+*                   return {
+*                     'en': { 'hello': 'My name is {name}'. },
+*                     'fr': { 'hello': 'Je m'apelle {name}'. }
+*                   }
+*               }
+*             }
 *           });
 *        &lt;/script>
 *     </dom-module>
@@ -93,7 +97,7 @@ Polymer.CarbonLocalizeBehavior = {
      */
     formats: {
       type: Object,
-      observer: '__updateLanguage'
+      value: function() { return {} }
     },
 
     /**
@@ -102,7 +106,7 @@ Polymer.CarbonLocalizeBehavior = {
      * `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
      */
     localize: {
-      computed: '__computeLocalize(language, resources)'
+      computed: '__computeLocalize(language, resources, formats)'
     }
   },
 
@@ -120,20 +124,19 @@ Polymer.CarbonLocalizeBehavior = {
         console.error('Could not load ' + path);
       });
       this.__request.generateRequest();
-
     }
   },
 
   /**
    * Returns a computed `localize` method, based on the current `language`.
    */
-  __computeLocalize: function(language, resources) {
+  __computeLocalize: function(language, resources, formats) {
     return function() {
       var key = arguments[0];
-      if (!key || !this.resources || !this.language)
+      if (!key || !resources || !language)
         return;
 
-      var msg = new IntlMessageFormat(this.resources[this.language][key], this.language, this.formats);
+      var msg = new IntlMessageFormat(resources[language][key], language, formats);
 
       var args = {};
       for (var i = 1; i < arguments.length; i+=2) {
@@ -142,17 +145,6 @@ Polymer.CarbonLocalizeBehavior = {
 
       return msg.format(args);
     }
-  },
-
-  /**
-   * The `localize` method is only computed when the `language` or `resources` change,
-   * But we might need to re-compute it when an optional dependency, like `formats`
-   * changes.
-   */
-  __updateLanguage: function() {
-    var temp = this.language;
-    this.language = undefined;
-    this.language = temp;
   }
 }
 
