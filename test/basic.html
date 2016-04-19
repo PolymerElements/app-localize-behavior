@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <link rel="import" href="x-translate.html">
   <link rel="import" href="x-translate2.html">
+  <link rel="import" href="x-translate-only-imperative.html">
 
 </head>
 <body>
@@ -35,6 +36,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="interpolated">
     <template>
       <x-translate2></x-translate2>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="only-imperative">
+    <template>
+      <x-translate-only-imperative></x-translate-only-imperative>
     </template>
   </test-fixture>
 
@@ -87,7 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       setup(function() {
         // Keep the tests independent by resetting the internal cache.
-        Polymer.Base.__localizeBehaviorCache = undefined;
+        Polymer.Base.__localizationRequestCache = undefined;
       });
 
       test('can translate a basic string', function(done) {
@@ -151,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     suite('json loading and caching', function() {
       setup(function() {
         // Keep the tests independent by resetting the internal cache.
-        Polymer.Base.__localizeBehaviorCache = undefined;
+        Polymer.Base.__localizationRequestCache = undefined;
       });
 
       test('loads the same json only file once', function(done) {
@@ -159,20 +166,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var app2 = fixture('interpolated');
         var path = app1.resolveUrl('locales.json');
 
-        assert.equal(undefined, Polymer.Base.__localizeBehaviorCache, 'there is no cache');
+        assert.equal(undefined, Polymer.Base.__localizationRequestCache, 'there is no cache');
 
         // Once the first file has been loaded, it should be the only thing in the cache.
         app1.addEventListener('carbon-resources-loaded', function() {
-          assert.notEqual(undefined, !Polymer.Base.__localizeBehaviorCache, 'there is a cache');
-          assert.equal(1, Object.keys(Polymer.Base.__localizeBehaviorCache).length, 'there is 1 request cached');
-          var request1 = Polymer.Base.__localizeBehaviorCache[path];
+          assert.notEqual(undefined, !Polymer.Base.__localizationRequestCache, 'there is a cache');
+          assert.equal(1, Object.keys(Polymer.Base.__localizationRequestCache).length, 'there is 1 request cached');
+          var request1 = Polymer.Base.__localizationRequestCache[path];
           assert.notEqual(undefined, request1, 'the cached request is ok');
           assert.equal(app1.resources['fr']['greeting'], 'bonjour');
 
           // Loading the second file should not make an iron-ajax request, and re-use the one in the cache.
           app2.loadResources(path);
-          assert.equal(1, Object.keys(Polymer.Base.__localizeBehaviorCache).length, 'there is still 1 request cached');
-          assert.equal(request1, Polymer.Base.__localizeBehaviorCache[path], 'the same request is cached');
+          assert.equal(1, Object.keys(Polymer.Base.__localizationRequestCache).length, 'there is still 1 request cached');
+          assert.equal(request1, Polymer.Base.__localizationRequestCache[path], 'the same request is cached');
           assert.equal(app1.resources, app2.resources, 'the apps have the same resources');
           assert.equal(app2.resources['fr']['greeting'], 'bonjour');
           done();
@@ -188,20 +195,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var path1 = app1.resolveUrl('locales.json');
         var path2 = app1.resolveUrl('locales2.json');
 
-        assert.equal(undefined, Polymer.Base.__localizeBehaviorCache, 'there is no cache');
+        assert.equal(undefined, Polymer.Base.__localizationRequestCache, 'there is no cache');
 
         // Once the first file has been loaded, it should be the only thing in the cache.
         app1.addEventListener('carbon-resources-loaded', function() {
-          assert.notEqual(undefined, !Polymer.Base.__localizeBehaviorCache, 'there is a cache');
-          assert.equal(1, Object.keys(Polymer.Base.__localizeBehaviorCache).length, 'there is 1 request cached');
-          var request1 = Polymer.Base.__localizeBehaviorCache[path1];
+          assert.notEqual(undefined, !Polymer.Base.__localizationRequestCache, 'there is a cache');
+          assert.equal(1, Object.keys(Polymer.Base.__localizationRequestCache).length, 'there is 1 request cached');
+          var request1 = Polymer.Base.__localizationRequestCache[path1];
           assert.notEqual(undefined, request1, 'the cached request is ok');
           assert.equal(app1.resources['fr']['greeting'], 'bonjour');
 
           // Loading a different file should make a different ajax request.
           app2.addEventListener('carbon-resources-loaded', function() {
-            assert.equal(2, Object.keys(Polymer.Base.__localizeBehaviorCache).length, 'there are 2 requests cached');
-            var request2 = Polymer.Base.__localizeBehaviorCache[path2];
+            assert.equal(2, Object.keys(Polymer.Base.__localizationRequestCache).length, 'there are 2 requests cached');
+            var request2 = Polymer.Base.__localizationRequestCache[path2];
             assert.notEqual(request1, request2, 'the cached requests are different');
             assert.notEqual(app1.resources, app2.resources, 'the apps don\'t have the same resources');
             assert.equal(app2.resources['fr']['greeting'], 'bonjour!');
@@ -215,6 +222,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
+    suite('localized string caching', function() {
+      setup(function() {
+        // Keep the tests independent by resetting the internal cache.
+        Polymer.Base.__localizationStringsCache = {};
+      });
+
+      test('constructs the same string only once', function() {
+        assert.equal(0, Object.keys(Polymer.Base.__localizationStringsCache).length, 'the cache is empty');
+        var app = fixture('only-imperative');
+
+        // Translating one string should add it to the cache.
+        assert.equal(app.localize('greeting'), 'hello');
+        assert.equal(1, Object.keys(Polymer.Base.__localizationStringsCache).length, 'there is 1 string cached');
+        var cachedString = Polymer.Base.__localizationStringsCache['greetinghello'];
+        assert.isNotNull(cachedString, 'cached string has an object');
+
+        // Translating the same string again should re-use it from the cache.
+        assert.equal(app.localize('greeting'), 'hello');
+        assert.equal(1, Object.keys(Polymer.Base.__localizationStringsCache).length, 'there is still 1 string cached');
+        assert.equal(cachedString, Polymer.Base.__localizationStringsCache['greetinghello'], 'cached string is the same');
+
+        // Changing the language should reset the cache.
+        app.language = 'fr';
+        assert.equal(0, Object.keys(Polymer.Base.__localizationStringsCache).length, 'the cache is empty');
+
+        // But translating a new string will re-add it to the cache.
+        assert.equal(app.localize('greeting'), 'bonjour');
+        assert.equal(1, Object.keys(Polymer.Base.__localizationStringsCache).length, 'there is 1 string cached');
+        var newCachedString = Polymer.Base.__localizationStringsCache['greetinghello'];
+        assert.notEqual(cachedString, newCachedString, 'cached string is different than before');
+      });
+    });
   </script>
 </body>
 </html>

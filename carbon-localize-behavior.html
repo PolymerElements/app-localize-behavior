@@ -126,14 +126,14 @@ Polymer.CarbonLocalizeBehavior = {
 
   loadResources: function(path) {
     // Cache requests for the same file, and use them if possible.
-    if (!Polymer.Base.__localizeBehaviorCache)
-      Polymer.Base.__localizeBehaviorCache = {};
+    if (!Polymer.Base.__localizationRequestCache)
+      Polymer.Base.__localizationRequestCache = {};
 
-    var request = Polymer.Base.__localizeBehaviorCache[path];
+    var request = Polymer.Base.__localizationRequestCache[path];
 
     if (!request) {
       request = document.createElement('iron-ajax');
-      Polymer.Base.__localizeBehaviorCache[path] = request;
+      Polymer.Base.__localizationRequestCache[path] = request;
 
       request.addEventListener('response', this.__onRequestResponse.bind(this));
       request.addEventListener('error', this.__onRequestError.bind(this));
@@ -157,12 +157,23 @@ Polymer.CarbonLocalizeBehavior = {
    * Returns a computed `localize` method, based on the current `language`.
    */
   __computeLocalize: function(language, resources, formats) {
+    // Everytime any of the parameters change, invalidate the strings cache.
+    delete Polymer.Base.__localizationStringsCache;
+    Polymer.Base.__localizationStringsCache = {};
+
     return function() {
       var key = arguments[0];
       if (!key || !resources || !language)
         return;
 
-      var msg = new IntlMessageFormat(resources[language][key], language, formats);
+      // Cache the key/value pairs for the same language, so that we don't
+      // do extra work if we're just reusing strings across an application.
+      var messageKey = key + resources[language][key];
+      var msg = Polymer.Base.__localizationStringsCache[messageKey];
+      if (!msg) {
+        msg = new IntlMessageFormat(resources[language][key], language, formats);
+        Polymer.Base.__localizationStringsCache[messageKey] = msg;
+      }
 
       var args = {};
       for (var i = 1; i < arguments.length; i+=2) {
