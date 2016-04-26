@@ -55,6 +55,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 Polymer.CarbonLocalizeBehavior = {
   /**
+   * Singleton cache of requests and localized strings. The localized strings
+   * cache is invalidated every time the language, resources or formats change.
+   * This is the private implementation of the behaviour; don't interact with
+   * it directly.
+   */
+  __localizationCache: {
+    requests: {},
+    messages: {}
+  },
+
+  /**
    * If the element is using `pathToResources` to load an external resources
    * file, fired when the file has been loaded.
    *
@@ -125,15 +136,11 @@ Polymer.CarbonLocalizeBehavior = {
   },
 
   loadResources: function(path) {
-    // Cache requests for the same file, and use them if possible.
-    if (!Polymer.Base.__localizationRequestCache)
-      Polymer.Base.__localizationRequestCache = {};
-
-    var request = Polymer.Base.__localizationRequestCache[path];
+    var request = this.constructor.prototype.__localizationCache.requests[path];
 
     if (!request) {
       request = document.createElement('iron-ajax');
-      Polymer.Base.__localizationRequestCache[path] = request;
+      this.constructor.prototype.__localizationCache.requests[path] = request;
 
       request.addEventListener('response', this.__onRequestResponse.bind(this));
       request.addEventListener('error', this.__onRequestError.bind(this));
@@ -158,8 +165,7 @@ Polymer.CarbonLocalizeBehavior = {
    */
   __computeLocalize: function(language, resources, formats) {
     // Everytime any of the parameters change, invalidate the strings cache.
-    delete Polymer.Base.__localizationStringsCache;
-    Polymer.Base.__localizationStringsCache = {};
+    this.constructor.prototype.__localizationCache.messages = {};
 
     return function() {
       var key = arguments[0];
@@ -169,10 +175,10 @@ Polymer.CarbonLocalizeBehavior = {
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
       var messageKey = key + resources[language][key];
-      var msg = Polymer.Base.__localizationStringsCache[messageKey];
+      var msg = this.constructor.prototype.__localizationCache.messages[messageKey];
       if (!msg) {
         msg = new IntlMessageFormat(resources[language][key], language, formats);
-        Polymer.Base.__localizationStringsCache[messageKey] = msg;
+        this.constructor.prototype.__localizationCache.messages[messageKey] = msg;
       }
 
       var args = {};
@@ -181,7 +187,7 @@ Polymer.CarbonLocalizeBehavior = {
       }
 
       return msg.format(args);
-    }
+    };
   },
 
   __onRequestResponse: function(event) {
