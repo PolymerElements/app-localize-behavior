@@ -55,14 +55,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 Polymer.CarbonLocalizeBehavior = {
   /**
-   * Singleton cache of requests and localized strings. The localized strings
-   * cache is invalidated every time the language, resources or formats change.
-   * This is the private implementation of the behaviour; don't interact with
-   * it directly.
+   * Internal singleton cache. This is the private implementation of the
+   * behaviour; don't interact with it directly.
    */
   __localizationCache: {
-    requests: {},
-    messages: {}
+    requests: {},  /* One iron-request per unique resources path. */
+    messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
+    ajax: null     /* Global iron-ajax object used to request resource files. */
   },
 
   /**
@@ -136,27 +135,27 @@ Polymer.CarbonLocalizeBehavior = {
   },
 
   loadResources: function(path) {
+    // If the global ajax object has not been initialized, initialize and cache it.
+    var ajax = this.constructor.prototype.__localizationCache.ajax;
+    if (!ajax) {
+      ajax = this.constructor.prototype.__localizationCache.ajax = document.createElement('iron-ajax');
+    }
+
     var request = this.constructor.prototype.__localizationCache.requests[path];
-
     if (!request) {
-      request = document.createElement('iron-ajax');
+      ajax.url = path;
+      var request = ajax.generateRequest();
+
+      request.completes.then(
+          this.__onRequestResponse.bind(this),
+          this.__onRequestError.bind(this));
+
+      // Cache the instance so that it can be reused if the same path is loaded.
       this.constructor.prototype.__localizationCache.requests[path] = request;
-
-      request.addEventListener('response', this.__onRequestResponse.bind(this));
-      request.addEventListener('error', this.__onRequestError.bind(this));
-
-      request.url = path;
-      request.handleAs = 'json';
-      request.generateRequest();
     } else {
-      // Re-use the already cached resources. If the last response is null,
-      // it could be because the request is already in flight, but hasn't completed.
-      if (!request.lastResponse) {
-        request.addEventListener('response', this.__onRequestResponse.bind(this));
-        request.addEventListener('error', this.__onRequestError.bind(this));
-      } else {
-        this.resources = request.lastResponse;
-      }
+      request.completes.then(
+          this.__onRequestResponse.bind(this),
+          this.__onRequestError.bind(this));
     }
   },
 
@@ -176,6 +175,7 @@ Polymer.CarbonLocalizeBehavior = {
       // do extra work if we're just reusing strings across an application.
       var messageKey = key + resources[language][key];
       var msg = this.constructor.prototype.__localizationCache.messages[messageKey];
+
       if (!msg) {
         msg = new IntlMessageFormat(resources[language][key], language, formats);
         this.constructor.prototype.__localizationCache.messages[messageKey] = msg;
@@ -191,7 +191,7 @@ Polymer.CarbonLocalizeBehavior = {
   },
 
   __onRequestResponse: function(event) {
-    this.resources = event.target.lastResponse;
+    this.resources = event.response;
     this.fire('carbon-resources-loaded');
   },
 
