@@ -135,13 +135,15 @@ Polymer.CarbonLocalizeBehavior = {
   },
 
   loadResources: function(path) {
+    var proto = this.constructor.prototype;
+
     // If the global ajax object has not been initialized, initialize and cache it.
-    var ajax = this.constructor.prototype.__localizationCache.ajax;
+    var ajax = proto.__localizationCache.ajax;
     if (!ajax) {
-      ajax = this.constructor.prototype.__localizationCache.ajax = document.createElement('iron-ajax');
+      ajax = proto.__localizationCache.ajax = document.createElement('iron-ajax');
     }
 
-    var request = this.constructor.prototype.__localizationCache.requests[path];
+    var request = proto.__localizationCache.requests[path];
     if (!request) {
       ajax.url = path;
       var request = ajax.generateRequest();
@@ -151,7 +153,7 @@ Polymer.CarbonLocalizeBehavior = {
           this.__onRequestError.bind(this));
 
       // Cache the instance so that it can be reused if the same path is loaded.
-      this.constructor.prototype.__localizationCache.requests[path] = request;
+      proto.__localizationCache.requests[path] = request;
     } else {
       request.completes.then(
           this.__onRequestResponse.bind(this),
@@ -163,8 +165,10 @@ Polymer.CarbonLocalizeBehavior = {
    * Returns a computed `localize` method, based on the current `language`.
    */
   __computeLocalize: function(language, resources, formats) {
+    var proto = this.constructor.prototype;
+
     // Everytime any of the parameters change, invalidate the strings cache.
-    this.constructor.prototype.__localizationCache.messages = {};
+    proto.__localizationCache.messages = {};
 
     return function() {
       var key = arguments[0];
@@ -174,11 +178,11 @@ Polymer.CarbonLocalizeBehavior = {
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
       var messageKey = key + resources[language][key];
-      var msg = this.constructor.prototype.__localizationCache.messages[messageKey];
+      var msg = proto.__localizationCache.messages[messageKey];
 
       if (!msg) {
         msg = new IntlMessageFormat(resources[language][key], language, formats);
-        this.constructor.prototype.__localizationCache.messages[messageKey] = msg;
+        proto.__localizationCache.messages[messageKey] = msg;
       }
 
       var args = {};
