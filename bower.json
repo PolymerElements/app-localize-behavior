@@ -1,6 +1,6 @@
 {
   "name": "carbon-localize-behavior",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A behavior to help with internationalizating apps",
   "authors": [
     "The Polymer Authors"
