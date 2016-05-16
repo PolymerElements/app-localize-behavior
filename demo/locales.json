@@ -6,7 +6,7 @@
     "intro": "My name is {name}",
     "cats": "I have {numCats, number} cats. Almost {pctBlack, number, percent} of them are black.",
     "sale": "Sale begins {start, date, medium}, at {time, time, short}. Everything is {price, number, USD}.",
-    "fruit": "{num, plural, =0 {no apple} =1 {one apple} other {# apples}}",
+    "fruit": "{num, plural, =0 {no apples} =1 {one apple} other {# apples}}",
     "bananas": "{name} ate {num, plural, =0 {no bananas} =1 {a banana} other {# bananas}} {gender, select, male {at his house.} female {at her house.} other {at their house.}}"
   },
   "fr": {
