@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../carbon-localize-behavior.html">
+<link rel="import" href="../app-localize-behavior.html">
 <link rel="import" href="common-styles.html">
 
 <dom-module id="x-local-translate">
@@ -40,17 +40,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: "x-local-translate",
 
       behaviors: [
-        Polymer.CarbonLocalizeBehavior
+        Polymer.AppLocalizeBehavior
       ],
 
       properties: {
-        /* Overriden from CarbonLocalizeBehavior */
+        /* Overriden from AppLocalizeBehavior */
         language: {
           value: 'en',
           type: String
         },
 
-        /* Overriden from CarbonLocalizeBehavior */
+        /* Overriden from AppLocalizeBehavior */
         formats: {
           type: Object,
           value: function() {
@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        /* Overriden from CarbonLocalizeBehavior */
+        /* Overriden from AppLocalizeBehavior */
         resources: {
           type: Object,
           value: function() {

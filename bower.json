@@ -1,5 +1,5 @@
 {
-  "name": "carbon-localize-behavior",
+  "name": "app-localize-behavior",
   "version": "0.1.0",
   "description": "A behavior to help with internationalizating apps",
   "authors": [
@@ -15,10 +15,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/polymerelements/carbon-localize-behavior"
+    "url": "git://github.com/polymerelements/app-localize-behavior"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/polymerelements/carbon-localize-behavior",
+  "homepage": "https://github.com/polymerelements/app-localize-behavior",
   "ignore": [],
   "dependencies": {
     "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
@@ -34,5 +34,5 @@
     "web-component-tester": "polymer/web-component-tester#^3.4.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "main": "carbon-localize-behavior"
+  "main": "app-localize-behavior.html"
 }
