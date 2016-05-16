@@ -21,7 +21,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 * object, you must load the polyfill yourself. An example polyfill can
 * be found [here](https://github.com/andyearnshaw/Intl.js/).
 *
-* Sample use:
+* `Polymer.AppLocalizeBehavior` supports the same [message-syntax](http://formatjs.io/guides/message-syntax/)
+* of format.js, in its entirety; use the library docs as reference for the
+* available message formats and options.
+*
+* Sample application loading resources from an external file:
+*     <dom-module id="x-app">
+*        <template>
+*         <div>{{localize('hello', 'Batman')}}</div>
+*        </template>
+*        <script>
+*           Polymer({
+*             is: "x-app",
+*
+*             behaviors: [
+*               Polymer.AppLocalizeBehavior
+*             ],
+*
+*             properties: {
+*               language: {
+*                 value: 'en'
+*               },
+*             }
+*
+*             attached: function() {
+*               this.loadResources(this.resolveUrl('locales.json'));
+*             },
+*           });
+*        &lt;/script>
+*     </dom-module>
+*
+* Alternatively, you can also inline your resources inside the app itself:
 *
 *     <dom-module id="x-app">
 *        <template>
