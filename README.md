@@ -77,7 +77,7 @@ Alternatively, you can also inline your resources inside the app itself:
             value: function() {
               return {
                 'en': { 'hello': 'My name is {name}.' },
-                'fr': { 'hello': 'Je m'apelle {name}.' }
+                'fr': { 'hello': 'Je m\'apelle {name}.' }
               }
           }
         }
