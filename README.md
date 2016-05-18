@@ -26,15 +26,16 @@ of format.js, in its entirety; use the library docs as reference for the
 available message formats and options.
 
 Sample application loading resources from an external file:
-    <dom-module id="x-app">
-       <template>
-        <div>{{localize('hello', 'Batman')}}</div>
-       </template>
-       <script>
-          Polymer({
-            is: "x-app",
 
 ```html
+<dom-module id="x-app">
+   <template>
+    <div>{{localize('hello', 'Batman')}}</div>
+   </template>
+   <script>
+      Polymer({
+        is: "x-app",
+
         behaviors: [
           Polymer.AppLocalizeBehavior
         ],
