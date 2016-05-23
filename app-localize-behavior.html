@@ -162,6 +162,7 @@ Polymer.AppLocalizeBehavior = {
      * `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
      */
     localize: {
+      type: Function,
       computed: '__computeLocalize(language, resources, formats)'
     }
   },
