@@ -73,6 +73,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String
         },
 
+        pathToResources: {
+          value: 'locales.json',
+          type: String
+        },
+
         /* Overriden from AppLocalizeBehavior */
         formats: {
           type: Object,
@@ -82,10 +87,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             };
           }
         }
-      },
-
-      attached: function() {
-        this.loadResources(this.resolveUrl('locales.json'));
       },
 
       _toggle: function() {
