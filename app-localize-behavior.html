@@ -208,13 +208,14 @@ Polymer.AppLocalizeBehavior = {
       if (!key || !resources || !language)
         return;
 
+      var rawTranslation = proto._extractTranslation(resources, language, key);
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
-      var messageKey = key + resources[language][key];
+      var messageKey = key + rawTranslation;
       var msg = proto.__localizationCache.messages[messageKey];
 
       if (!msg) {
-        msg = new IntlMessageFormat(resources[language][key], language, formats);
+        msg = new IntlMessageFormat(proto._extractTranslation(resources, language, key), language, formats);
         proto.__localizationCache.messages[messageKey] = msg;
       }
 
@@ -225,6 +226,16 @@ Polymer.AppLocalizeBehavior = {
 
       return msg.format(args);
     };
+  },
+
+  _extractTranslation: function (resources, language, key){
+    var resource = resources[language], keyChain = key.split('.');
+
+    keyChain.forEach(function (currentKey) {
+      resource = resource[currentKey];
+    });
+
+    return resource;
   },
 
   __onRequestResponse: function(event) {
