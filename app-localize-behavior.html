@@ -201,7 +201,9 @@ Polymer.AppLocalizeBehavior = {
     var proto = this.constructor.prototype;
 
     // Everytime any of the parameters change, invalidate the strings cache.
-    proto.__localizationCache.messages = {};
+    if (proto.__localizationCache) {
+      proto.__localizationCache.messages = {};
+    }
 
     return function() {
       var key = arguments[0];
@@ -211,11 +213,16 @@ Polymer.AppLocalizeBehavior = {
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
       var messageKey = key + resources[language][key];
-      var msg = proto.__localizationCache.messages[messageKey];
+      var msg;
+      if (proto.__localizationCache) {
+        msg = proto.__localizationCache.messages[messageKey];
+      }
 
       if (!msg) {
         msg = new IntlMessageFormat(resources[language][key], language, formats);
-        proto.__localizationCache.messages[messageKey] = msg;
+        if (proto.__localizationCache) {
+          proto.__localizationCache.messages[messageKey] = msg;
+        }
       }
 
       var args = {};
