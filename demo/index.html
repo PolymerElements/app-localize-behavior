@@ -17,13 +17,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
     <link rel="import" href="../../paper-styles/typography.html">
-    <link rel="import" href="x-translate.html">
-    <link rel="import" href="x-local-translate.html">
 
     <!-- Intl polyfill -->
     <script src="../../intl/dist/Intl.min.js"></script>
     <script src="../../intl/locale-data/jsonp/en.js"></script>
+
+    <!-- Must import polymer before running next script. -->
+    <link rel="import" href="../../polymer/polymer.html">
+    <!-- Set this before importing components that use app-localize-behavior. -->
+    <script>Polymer.defaultLanguage = 'fr'</script>
+
+    <link rel="import" href="x-translate.html">
+    <link rel="import" href="x-local-translate.html">
   </head>
 
   <body unresolved>

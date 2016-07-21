@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../intl-messageformat/dist/intl-messageformat.min.js"></script>
 
 <script>
+  const appLocalizeBehaviorInstances = [];
 
 /**
 * `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
@@ -115,7 +116,9 @@ Polymer.AppLocalizeBehavior = {
      * The language used for translation.
      */
     language: {
-      type: String
+      type: String,
+      value: Polymer.defaultLanguage,
+      observer: '_languageChanged'
     },
 
     /**
@@ -176,6 +179,20 @@ Polymer.AppLocalizeBehavior = {
     }
   },
 
+  _languageChanged() {
+    // Clear the message cache.
+    var proto = this.constructor.prototype;
+    proto.__localizationCache.messages = {};
+
+    for (const instance of appLocalizeBehaviorInstances) {
+      // Update the language of all instances to match this one.
+      instance.language = this.language;
+
+      // If the instance has the languageChanged method, call it.
+      if (instance.languageChanged) instance.languageChanged();
+    }
+  },
+
   loadResources: function(path) {
     var proto = this.constructor.prototype;
 
@@ -203,6 +220,16 @@ Polymer.AppLocalizeBehavior = {
     }
   },
 
+  ready() {
+    console.log('app-localize-behavior.html ready: this.useKeyIfMissing =', this.useKeyIfMissing);
+    // If the instance has the languageChanged method, call it.
+    // This allows it to set its initial state based on the language.
+    if (this.languageChanged) this.languageChanged();
+
+    // Keep a list of each instance for use in _languageChanged.
+    appLocalizeBehaviorInstances.push(this);
+  },
+
   /**
    * Returns a computed `localize` method, based on the current `language`.
    */
@@ -219,13 +246,17 @@ Polymer.AppLocalizeBehavior = {
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
-      var messageKey = key + resources[language][key];
-      var msg = proto.__localizationCache.messages[messageKey];
+      var value = resources[language][key];
+      var msg;
+      if (value) {
+        var messageKey = key + value;
+        msg = proto.__localizationCache.messages[messageKey];
+      }
 
-      if (!msg) {
+      if (value && !msg) {
         try {
-          msg = new IntlMessageFormat(resources[language][key], language, formats);
-          proto.__localizationCache.messages[messageKey] = msg;
+          msg = new IntlMessageFormat(value, language, formats);
+          if (msg) proto.__localizationCache.messages[messageKey] = msg;
         } catch (e) {
           if (!this.useKeyIfMissing) throw e;
         }
@@ -236,7 +267,9 @@ Polymer.AppLocalizeBehavior = {
         args[arguments[i]] = arguments[i+1];
       }
 
-      return !msg && this.useKeyIfMissing ? key : msg.format(args);
+      return msg ? msg.format(args) :
+        this.useKeyIfMissing ? key :
+        '';
     };
   },
 
