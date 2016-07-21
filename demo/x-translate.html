@@ -69,6 +69,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         /* Overriden from AppLocalizeBehavior */
+        language: {
+          value: 'en',
+          type: String
+        },
+
+        /* Overriden from AppLocalizeBehavior */
         formats: {
           type: Object,
           value: function() {
@@ -77,20 +83,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             };
           }
         },
-
-        /* Overriden from AppLocalizeBehavior */
-        useKeyIfMissing: {
-          type: Boolean,
-          value: true
-        }
       },
 
       attached: function() {
         this.loadResources(this.resolveUrl('locales.json'));
-      },
-
-      languageChanged() {
-        this.$.switch.checked = this.language === 'fr';
       },
 
       _toggle: function() {
