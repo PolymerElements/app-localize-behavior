@@ -23,10 +23,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Intl polyfill -->
   <script src="../../intl/dist/Intl.min.js"></script>
   <script src="../../intl/locale-data/jsonp/en.js"></script>
+  <script src="../../intl/locale-data/jsonp/fr.js"></script>
 
   <link rel="import" href="x-translate.html">
   <link rel="import" href="x-translate2.html">
   <link rel="import" href="x-translate-only-imperative.html">
+  <link rel="import" href="x-translate-l10n.html">
 
 </head>
 <body>
@@ -52,6 +54,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="only-imperative">
     <template>
       <x-translate-only-imperative></x-translate-only-imperative>
+    </template>
+  </test-fixture>
+
+   <test-fixture id="l10n">
+    <template>
+      <x-translate-l10n></x-translate-l10n>
     </template>
   </test-fixture>
 
@@ -93,6 +101,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app.language = 'fr';
         assert.equal(app.language, 'fr');
         assert.equal(app.$.output.innerHTML, 'je m\'apelle batman. j\'ai 3 chats.');
+      });
+
+      test('can localize a currency', function() {
+        var app = fixture('l10n');
+
+        app.language = 'fr';
+        assert.equal(app.$.output.innerHTML, 'Tout est à 10,00&nbsp;$US');
+
+        app.language = 'en';
+        assert.equal(app.$.output.innerHTML, 'Everything is $10.00');
+
       });
 
       test('can translate strings imperatively', function() {
