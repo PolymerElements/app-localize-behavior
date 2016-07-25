@@ -47,7 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         /* Overriden from AppLocalizeBehavior */
         language: {
           value: 'en',
-          type: String
+          type: String,
+          observer: '_changeLanguage'
         },
 
         /* Overriden from AppLocalizeBehavior */
@@ -74,6 +75,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             };
           }
         }
+      },
+
+      _changeLanguage() {
+        this.$.switch.checked = this.language === 'fr';
       },
 
       _toggle: function() {
