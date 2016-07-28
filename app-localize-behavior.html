@@ -115,7 +115,7 @@ Polymer.AppLocalizeBehavior = {
      * The language used for translation.
      */
     language: {
-      type: String
+      type: String,
     },
 
     /**
@@ -154,6 +154,15 @@ Polymer.AppLocalizeBehavior = {
     formats: {
       type: Object,
       value: function() { return {} }
+    },
+
+    /**
+     * When there is no translation for a given key,
+     * the key will be used when this is true.
+     */
+    useKeyIfMissing: {
+      type: Boolean,
+      value: false
     },
 
     /**
@@ -210,20 +219,26 @@ Polymer.AppLocalizeBehavior = {
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
-      var messageKey = key + resources[language][key];
-      var msg = proto.__localizationCache.messages[messageKey];
+      var translatedValue = resources[language][key];
 
-      if (!msg) {
-        msg = new IntlMessageFormat(resources[language][key], language, formats);
-        proto.__localizationCache.messages[messageKey] = msg;
+      if (!translatedValue) {
+        return this.useKeyIfMissing ? key : '';
+      }
+
+      var messageKey = key + translatedValue;
+      var translatedMessage = proto.__localizationCache.messages[messageKey];
+
+      if (!translatedMessage) {
+        translatedMessage = new IntlMessageFormat(translatedValue, language, formats);
+        proto.__localizationCache.messages[messageKey] = translatedMessage;
       }
 
       var args = {};
-      for (var i = 1; i < arguments.length; i+=2) {
+      for (var i = 1; i < arguments.length; i += 2) {
         args[arguments[i]] = arguments[i+1];
       }
 
-      return msg.format(args);
+      return translatedMessage.format(args);
     };
   },
 
