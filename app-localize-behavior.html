@@ -115,7 +115,7 @@ Polymer.AppLocalizeBehavior = {
      * The language used for translation.
      */
     language: {
-      type: String
+      type: String,
     },
 
     /**
@@ -157,8 +157,8 @@ Polymer.AppLocalizeBehavior = {
     },
 
     /**
-     * If true, will use the provided key when
-     * the translation does not exist for that key.
+     * When there is no translation for a given key,
+     * the key will be used when this is true.
      */
     useKeyIfMissing: {
       type: Boolean,
