@@ -205,7 +205,7 @@ Polymer.AppLocalizeBehavior = {
 
     return function() {
       var key = arguments[0];
-      if (!key || !resources || !language)
+      if (!key || !resources || !language || !resources[language])
         return;
 
       // Cache the key/value pairs for the same language, so that we don't
