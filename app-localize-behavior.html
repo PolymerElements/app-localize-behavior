@@ -115,7 +115,8 @@ Polymer.AppLocalizeBehavior = {
      * The language used for translation.
      */
     language: {
-      type: String
+      type: String,
+      observer: '__languageChanged'
     },
 
     /**
@@ -194,6 +195,10 @@ Polymer.AppLocalizeBehavior = {
     }
   },
 
+  ready() {
+    this.fire('app-localize-behavior-created', this);
+  },
+
   /**
    * Returns a computed `localize` method, based on the current `language`.
    */
@@ -225,6 +230,10 @@ Polymer.AppLocalizeBehavior = {
 
       return msg.format(args);
     };
+  },
+
+  __languageChanged: function() {
+    this.fire('app-language-changed', this.language);
   },
 
   __onRequestResponse: function(event) {
