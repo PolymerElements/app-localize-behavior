@@ -37,6 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="missing">
+    <template>
+      <x-translate use-key-if-missing></x-translate>
+    </template>
+  </test-fixture>
+
   <test-fixture id="basic2">
     <template>
       <x-translate></x-translate>
@@ -78,10 +84,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         assert.equal(app.language, 'en');
         assert.equal(app.$.output.innerHTML, 'hello');
+        assert.equal(app.$.missing.innerHTML, '');
 
         app.language = 'fr';
         assert.equal(app.language, 'fr');
         assert.equal(app.$.output.innerHTML, 'bonjour');
+      });
+
+      test('can handle missing keys', function() {
+        var app = fixture('missing');
+
+        assert.equal(app.language, 'en');
+        assert.equal(app.$.missing.innerHTML, 'missing');
+
+        app.language = 'fr';
+        assert.equal(app.language, 'fr');
+        assert.equal(app.$.missing.innerHTML, 'missing');
       });
 
       test('can translate a string with a parameter', function() {
