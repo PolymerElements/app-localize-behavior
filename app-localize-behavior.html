@@ -212,6 +212,10 @@ Polymer.AppLocalizeBehavior = {
       // do extra work if we're just reusing strings across an application.
       var messageKey = key + resources[language][key];
       var msg = proto.__localizationCache.messages[messageKey];
+      
+      if (resources[language][key] === undefined) {
+          throw new Error('Localice key: "' + key + '" in component "' + this.is + '" does not exist.');
+      }
 
       if (!msg) {
         msg = new IntlMessageFormat(resources[language][key], language, formats);
