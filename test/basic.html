@@ -149,6 +149,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(app1.localize('greeting'), 'bonjour');
         assert.equal(app2.localize('intro', 'name', 'robin', 'numCats', 17), 'je m\'apelle robin. j\'ai 17 chats.');
       });
+
+      test('doesnt explode if language not loaded', function() {
+        var app = fixture('basic');
+
+        app.language = 'fake';
+
+        assert.equal(app.localize('greeting'), undefined);
+      });
     });
 
     suite('external resources', function() {
