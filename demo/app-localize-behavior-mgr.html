@@ -11,7 +11,9 @@
       properties: {
         _instances: {
           type: Array,
-          value: () => []
+          value: function () {
+            return [];
+          }
         },
         _lastLanguage: String
       },
@@ -26,12 +28,14 @@
       },
 
       _changeLanguage(event) {
-        const language = event.detail;
-        if (language === this._lastLanguage) return;
+        var language = event.detail;
+        if (language === this._lastLanguage) {
+          return;
+        }
 
         this._lastLanguage = language;
 
-        this._instances.forEach(instance => {
+        this._instances.forEach(function (instance) {
           instance.language = language;
         });
       }

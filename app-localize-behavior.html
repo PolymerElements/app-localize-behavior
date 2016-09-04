@@ -110,6 +110,23 @@ Polymer.AppLocalizeBehavior = {
    * @event app-resources-error
    */
 
+  /**
+   * This event is fired when each instance of app-localize-behavior
+   * is created. It is useful for collecting the instances so that
+   * later a method can be called on each of them.  For an example,
+   * see demo/app-localize-behavior-mgr.html.
+   *
+   * @event app-localize-behavior-created
+   */
+
+  /**
+   * This event is fired every time the language is changed.
+   * For an example of how this might be used,
+   * see demo/app-localize-behavior-mgr.html.
+   *
+   * @event app-language-changed
+   */
+
   properties: {
     /**
      * The language used for translation.
