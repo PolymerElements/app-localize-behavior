@@ -100,14 +100,14 @@ Polymer.AppLocalizeBehavior = {
    * If the element is using `pathToResources` to load an external resources
    * file, fired when the file has been loaded.
    *
-   * @event app-resources-loaded
+   * @event app-localize-resources-loaded
    */
 
   /**
    * If the element is using `pathToResources` to load an external resources
    * file, fired when the file cannot be loaded due to an error.
    *
-   * @event app-resources-error
+   * @event app-localize-resources-error
    */
 
   properties: {
@@ -244,11 +244,11 @@ Polymer.AppLocalizeBehavior = {
 
   __onRequestResponse: function(event) {
     this.resources = event.response;
-    this.fire('app-resources-loaded');
+    this.fire('app-localize-resources-loaded');
   },
 
   __onRequestError: function(event) {
-    this.fire('app-resources-error');
+    this.fire('app-localize-resources-error');
   }
 }
 
