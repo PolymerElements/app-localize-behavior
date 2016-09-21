@@ -173,6 +173,14 @@ Polymer.AppLocalizeBehavior = {
     localize: {
       type: Function,
       computed: '__computeLocalize(language, resources, formats)'
+    },
+
+    /**
+    * If true, will bubble up the event to the parents
+    */
+    bubbleEvent: {
+      type: Boolean,
+      value: false
     }
   },
 
@@ -244,7 +252,7 @@ Polymer.AppLocalizeBehavior = {
 
   __onRequestResponse: function(event) {
     this.resources = event.response;
-    this.fire('app-localize-resources-loaded');
+    this.fire('app-localize-resources-loaded', event, { bubbles: this.bubbleEvent});
   },
 
   __onRequestError: function(event) {
