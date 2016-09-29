@@ -116,7 +116,7 @@ Polymer.AppLocalizeBehavior = {
    * later a method can be called on each of them.  For an example,
    * see demo/app-localize-behavior-mgr.html.
    *
-   * @event app-localize-behavior-created
+   * @event app-localize-behavior-ready
    */
 
   /**
@@ -213,7 +213,7 @@ Polymer.AppLocalizeBehavior = {
   },
 
   ready() {
-    this.fire('app-localize-behavior-created', this);
+    this.fire('app-localize-behavior-ready', this);
   },
 
   /**

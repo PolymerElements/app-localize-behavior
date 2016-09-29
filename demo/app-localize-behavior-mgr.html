@@ -19,15 +19,15 @@
       },
 
       listeners: {
-        'app-localize-behavior-created': '_addInstance',
-        'app-language-changed': '_changeLanguage'
+        'app-localize-behavior-ready': '__addInstance',
+        'app-language-changed': '__changeLanguage'
       },
 
-      _addInstance(event) {
+      __addInstance(event) {
         this.push('_instances', event.detail);
       },
 
-      _changeLanguage(event) {
+      __changeLanguage(event) {
         var language = event.detail;
         if (language === this._lastLanguage) {
           return;
