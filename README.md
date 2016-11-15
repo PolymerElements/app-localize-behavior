@@ -82,7 +82,7 @@ Alternatively, you can also inline your resources inside the app itself:
           }
         }
       });
-   &lt;/script>
+   </script>
 </dom-module>
 ```
 
