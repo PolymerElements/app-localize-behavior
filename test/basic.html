@@ -125,8 +125,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var app = fixture('l10n');
 
         app.language = 'fr';
-        assert.equal(app.$.output.innerHTML, 'Tout est à 10,00&nbsp;$US');
 
+        // Note: In French, on Edge and everything else, format.js seems to
+        // behave differently - in not-edge, the result is "10 $US", in Edge
+        // it's just 10$. This isn't something we control, so check the string
+        // is mostly right.
+        assert.equal(app.$.output.innerHTML.indexOf('Tout est à 10,00&nbsp;$'), 0);
+        
         app.language = 'en';
         assert.equal(app.$.output.innerHTML, 'Everything is $10.00');
 
