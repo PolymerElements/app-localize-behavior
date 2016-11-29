@@ -21,14 +21,14 @@
   "homepage": "https://github.com/polymerelements/app-localize-behavior",
   "ignore": [],
   "dependencies": {
-    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#2.0-preview",
     "intl-messageformat": "yahoo/intl-messageformat#^1.0.0",
     "polymer": "polymer/polymer#2.0-preview"
   },
   "devDependencies": {
     "intl": "andyearnshaw/intl.js#^1.0.0",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
-    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#2.0-preview",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#v1",
