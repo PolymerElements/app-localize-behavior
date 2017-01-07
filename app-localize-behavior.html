@@ -210,7 +210,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          * Returns a computed `localize` method, based on the current `language`.
          */
         __computeLocalize(language, resources, formats) {
-            console.log('should compute localize', language, resources, formats);
             // Everytime any of the parameters change, invalidate the strings cache.
             __localizationCache.messages = {};
 
