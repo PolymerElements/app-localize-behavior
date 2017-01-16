@@ -244,13 +244,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         __onRequestResponse(event) {
             this.resources = event.response;
-//            this.fire('app-localize-resources-loaded'); // this can't exist anymore?
+            this.dispatchEvent(new CustomEvent('app-localize-resources-loaded'));
         }
 
 
         __onRequestError(event) {
-//            this.fire('app-localize-resources-error'); // this can't exist anymore?
-            console.log('app-localize-resources-error')
+            this.dispatchEvent(new CustomEvent('app-localize-resources-error'));
         }
     }
 
