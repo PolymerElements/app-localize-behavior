@@ -30,7 +30,7 @@
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#2.0-preview",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
-    "web-component-tester": "^4.0.0",
+    "web-component-tester": "v6.0.0-prerelease.5",
     "webcomponentsjs": "webcomponents/webcomponentsjs#v1",
     "test-fixture": "PolymerElements/test-fixture#^2.0.0"
   },
@@ -41,5 +41,20 @@
     "iron-flex-layout": "2.0-preview",
     "webcomponentsjs": "v1",
     "test-fixture": "^2.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+        "polymer": "Polymer/polymer#^1.1.0"
+      },
+      "devDependencies": {
+        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+        "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
+        "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+        "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+      }
+    }
   }
 }
