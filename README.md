@@ -33,23 +33,22 @@ Sample application loading resources from an external file:
     <div>{{localize('hello', 'name', 'Batman')}}</div>
    </template>
    <script>
-      Polymer({
-        is: "x-app",
+      class XApp extends Polymer.AppLocalizeBehavior(Polymer.Element) {
+         static get is() {
+            return 'x-app';
+         }
 
-        behaviors: [
-          Polymer.AppLocalizeBehavior
-        ],
+         static get config() {
+            return {properties: {language: {type: String, value: 'en'}}};
+         }
 
-        properties: {
-          language: {
-            value: 'en'
-          },
-        }
+         connectedCallback() {
+            super.connectedCallback();
+            this.loadResources(this.resolveUrl('locales.json'));
+         }
+      }
 
-        attached: function() {
-          this.loadResources(this.resolveUrl('locales.json'));
-        },
-      });
+      customElements.define(XApp.is, XApp);
    &lt;/script>
 </dom-module>
 ```
@@ -62,26 +61,32 @@ Alternatively, you can also inline your resources inside the app itself:
     <div>{{localize('hello', 'name', 'Batman')}}</div>
    </template>
    <script>
-      Polymer({
-        is: "x-app",
+      class XApp extends Polymer.AppLocalizeBehavior(Polymer.Element) {
+         static get is() {
+            return 'x-app';
+         }
 
-        behaviors: [
-          Polymer.AppLocalizeBehavior
-        ],
-
-        properties: {
-          language: {
-            value: 'en'
-          },
-          resources: {
-            value: function() {
-              return {
-                'en': { 'hello': 'My name is {name}.' },
-                'fr': { 'hello': 'Je m\'apelle {name}.' }
-              }
-          }
-        }
-      });
+         static get config() {
+            return {
+               properties: {
+                  language: {
+                     type: String,
+                     value: 'en'
+                  },
+                  resources: {
+                     value: function() {
+                        return {
+                           'en': { 'hello': 'My name is {name}.' },
+                           'fr': { 'hello': 'Je m\'apelle {name}.' }
+                        };
+                     }
+                  }    
+               }
+            }
+         }
+      }
+      
+      customElements.define(XApp.is, XApp);
    &lt;/script>
 </dom-module>
 ```

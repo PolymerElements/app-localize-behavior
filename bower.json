@@ -15,10 +15,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/polymerelements/app-localize-behavior"
+    "url": "git://github.com/nadous/app-localize-behavior"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/polymerelements/app-localize-behavior",
+  "homepage": "https://github.com/nadous/app-localize-behavior",
   "ignore": [],
   "dependencies": {
     "iron-ajax": "PolymerElements/iron-ajax#2.0-preview",
