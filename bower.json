@@ -23,7 +23,7 @@
   "dependencies": {
     "iron-ajax": "PolymerElements/iron-ajax#2.0-preview",
     "intl-messageformat": "yahoo/intl-messageformat#^1.0.0",
-    "polymer": "polymer/polymer#2.0-preview"
+    "polymer": "polymer/polymer#^2.0.0-rc.1"
   },
   "devDependencies": {
     "intl": "andyearnshaw/intl.js#^1.0.0",
