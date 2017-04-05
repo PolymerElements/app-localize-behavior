@@ -258,6 +258,7 @@ Polymer.AppLocalizeBehavior = {
   },
 
   __checkLocalizationCache() {
+    var proto = this.constructor.prototype;
     // In the event proto not have __localizationCache object, create it.
     if(proto['__localizationCache'] === undefined) {
       proto['__localizationCache'] = {requests: {}, messages: {}, ajax: null};
