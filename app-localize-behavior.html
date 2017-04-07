@@ -112,6 +112,13 @@ Polymer.AppLocalizeBehavior = {
 
   properties: {
     /**
+     * Fallback language to use if a string cannot be found in the desired language
+     */
+    defaultLanguage: {
+      type: String
+    },
+
+    /**
      * The language used for translation.
      */
     language: {
@@ -154,6 +161,15 @@ Polymer.AppLocalizeBehavior = {
     formats: {
       type: Object,
       value: function() { return {} }
+    },
+
+    /**
+     * If true, will use the langauge in the defaultLanguage property
+     * when the translation does not exist for that key.
+     */
+    useDefaultLanguageIfMissing: {
+      type: Boolean,
+      value: false
     },
 
     /**
@@ -225,6 +241,17 @@ Polymer.AppLocalizeBehavior = {
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
       var translatedValue = resources[language][key];
+
+      // fallback to using the translation from the default language
+      // if enabled
+      if (
+        !translatedValue &&
+        this.useDefaultLanguageIfMissing &&
+        this.defaultLanguage &&
+        resources[this.defaultLanguage]
+      ) {
+        translatedValue = resources[this.defaultLanguage][key];
+      }
 
       if (!translatedValue) {
         return this.useKeyIfMissing ? key : '';
