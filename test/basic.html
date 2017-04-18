@@ -45,6 +45,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="defaultLanguage">
+    <template>
+      <x-translate use-default-language-if-missing default-language="en"></x-translate>
+    </template>
+  </test-fixture>
+
   <test-fixture id="basic2">
     <template>
       <x-translate></x-translate>
@@ -110,6 +116,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(app.$.missing.innerHTML, 'missing');
       });
 
+      test('can fall back to default language when missing keys', function() {
+        var app = fixture('defaultLanguage');
+
+        app.resources = {
+          'en': {
+            'greeting': 'hello',
+            'missing': 'this text does not exist in french'
+          },
+          'fr' : {
+            'greeting': 'bonjour'
+          }
+        };
+
+        assert.equal(app.language, 'en');
+        assert.equal(app.$.output.innerHTML, 'hello');
+        assert.equal(app.$.missing.innerHTML, 'this text does not exist in french');
+
+        app.language = 'fr';
+        assert.equal(app.language, 'fr');
+        // ensure text where the key does exist in the new language is correctly translated
+        assert.equal(app.$.output.innerHTML, 'bonjour');
+        // ensure text where the key does not exist falls back to the default language
+        assert.equal(app.$.missing.innerHTML, 'this text does not exist in french');
+      });
+
       test('can translate a string with a parameter', function() {
         var app = fixture('interpolated');
 
@@ -131,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // it's just 10$. This isn't something we control, so check the string
         // is mostly right.
         assert.equal(app.$.output.innerHTML.indexOf('Tout est à 10,00&nbsp;$'), 0);
-        
+
         app.language = 'en';
         assert.equal(app.$.output.innerHTML, 'Everything is $10.00');
 
