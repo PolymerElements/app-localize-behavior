@@ -256,7 +256,7 @@ Polymer.AppLocalizeBehavior = {
     this.fire('app-localize-resources-error');
   },
 
-  __checkLocalizationCache(proto) {
+  __checkLocalizationCache: function(proto) {
     // do nothing if proto is undefined.
     if(proto === undefined) return;
 
