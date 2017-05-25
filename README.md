@@ -52,7 +52,7 @@ Sample application loading resources from an external file:
           this.loadResources(this.resolveUrl('locales.json'));
         },
       });
-   &lt;/script>
+   </script>
 </dom-module>
 ```
 
@@ -81,10 +81,11 @@ Alternatively, you can also inline your resources inside the app itself:
                 'en': { 'hello': 'My name is {name}.' },
                 'fr': { 'hello': 'Je m\'apelle {name}.' }
               }
+            }
           }
         }
       });
-   &lt;/script>
+   </script>
 </dom-module>
 ```
 
