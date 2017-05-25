@@ -43,11 +43,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 *               language: {
 *                 value: 'en'
 *               },
+*
+*               pathToResources: {
+*                 value: 'locales.json',
+*                 type: String
+*               }
 *             }
 *
-*             attached: function() {
-*               this.loadResources(this.resolveUrl('locales.json'));
-*             },
 *           });
 *        &lt;/script>
 *     </dom-module>
@@ -245,6 +247,12 @@ Polymer.AppLocalizeBehavior = {
 
       return translatedMessage.format(args);
     };
+  },
+
+  attached: function() {
+    if (this.pathToResources) {
+      this.loadResources(this.resolveUrl(this.pathToResources));
+    }
   },
 
   __onRequestResponse: function(event) {
