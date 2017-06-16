@@ -172,7 +172,7 @@ Polymer.AppLocalizeBehavior = {
     }
   },
 
-  loadResources: function(path) {
+  loadResources: function(path, withCredentials, headers) {
     var proto = this.constructor.prototype;
 
     // Check if localCache exist just in case.
@@ -187,6 +187,10 @@ Polymer.AppLocalizeBehavior = {
     var request = proto.__localizationCache.requests[path];
     if (!request) {
       ajax.url = path;
+      ajax.withCredentials = !!withCredentials;
+      if (headers instanceof Object) {
+        ajax.headers = headers;
+      }
       var request = ajax.generateRequest();
 
       request.completes.then(
