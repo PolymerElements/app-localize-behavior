@@ -160,7 +160,7 @@ Polymer.AppLocalizeBehavior = {
      */
     localize: {
       type: Function,
-      computed: '__computeLocalize(language, resources, formats)'
+      computed: '__computeLocalize(language, resources, formats, extractTranslation)'
     },
 
     /**
@@ -169,6 +169,18 @@ Polymer.AppLocalizeBehavior = {
     bubbleEvent: {
       type: Boolean,
       value: false
+    },
+
+    /**
+     * Extracts a translation from the resource file based on the language/key
+     */
+    extractTranslation: {
+      type: Function,
+      value: function() {
+        return function(resources, language, key) {
+          return resources[language] ? resources[language][key] : null;
+        }
+      }
     }
   },
 
@@ -205,7 +217,7 @@ Polymer.AppLocalizeBehavior = {
   /**
    * Returns a computed `localize` method, based on the current `language`.
    */
-  __computeLocalize: function(language, resources, formats) {
+  __computeLocalize: function(language, resources, formats, extractTranslation) {
     var proto = this.constructor.prototype;
 
     // Check if localCache exist just in case.
@@ -219,12 +231,12 @@ Polymer.AppLocalizeBehavior = {
 
     return function() {
       var key = arguments[0];
-      if (!key || !resources || !language || !resources[language])
+      if (!key || !resources || !language || !extractTranslation)
         return;
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
-      var translatedValue = resources[language][key];
+      var translatedValue = extractTranslation(resources, language, key);
 
       if (!translatedValue) {
         return this.useKeyIfMissing ? key : '';
