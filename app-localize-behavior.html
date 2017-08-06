@@ -166,15 +166,19 @@ Polymer.AppLocalizeBehavior = {
     /**
      * If true, the global language attribute on the html tag
      * will be used as the default language value.
+     * Use document.documentElement.lang = "de" to change the language 
+     * of the entire app.
      */
     useHtmlLanguage: {
       type: Boolean,
-      value: false,
-      observer: '__useHtmlLanguageChanged'
+      value: false
     },
 
-    _htmlLanguageObserver: {
-      type: Object
+    /**
+     * The url of the locales.json file
+     */
+    resourceUrl: {
+      type: String
     },
 
     /**
@@ -183,13 +187,26 @@ Polymer.AppLocalizeBehavior = {
     bubbleEvent: {
       type: Boolean,
       value: false
+    },
+
+    /**
+     * The instance of the 'lang' attribute observer 
+     * of the html tag.
+     */
+    ___htmlLanguageObserver: {
+      type: Object
     }
   },
 
+  observers: [
+    '__useHtmlLanguageChanged(useHtmlLanguage)',
+    'loadResources(resourceUrl)'
+  ],
+
   __useHtmlLanguageChanged: function(useHtmlLanguage) {
     if (!useHtmlLanguage) {
-      if (this._htmlLanguageObserver) {
-        this._htmlLanguageObserver.disconnect();
+      if (this.__htmlLanguageObserver) {
+        this.__htmlLanguageObserver.disconnect();
       }
       return;
     }
@@ -199,13 +216,13 @@ Polymer.AppLocalizeBehavior = {
       console.warn('AppLocalizeBehavior needs the lang attribute to be set on the html tag.');
     }
 
-    if (!this._htmlLanguageObserver) {
-      this._htmlLanguageObserver = new MutationObserver(function() {
+    if (!this.__htmlLanguageObserver) {
+      this.__htmlLanguageObserver = new MutationObserver(function() {
         this.language = html.lang;
       }.bind(this));
     }
 
-    this._htmlLanguageObserver.observe(html, { attributes: true });
+    this.__htmlLanguageObserver.observe(html, { attributes: true });
     this.language = html.lang;
   },
 
