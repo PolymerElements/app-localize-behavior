@@ -164,12 +164,49 @@ Polymer.AppLocalizeBehavior = {
     },
 
     /**
+     * If true, the global language attribute on the html tag
+     * will be used as the default language value.
+     */
+    useHtmlLanguage: {
+      type: Boolean,
+      value: false,
+      observer: '__useHtmlLanguageChanged'
+    },
+
+    _htmlLanguageObserver: {
+      type: Object
+    },
+
+    /**
     * If true, will bubble up the event to the parents
     */
     bubbleEvent: {
       type: Boolean,
       value: false
     }
+  },
+
+  __useHtmlLanguageChanged: function(useHtmlLanguage) {
+    if (!useHtmlLanguage) {
+      if (this._htmlLanguageObserver) {
+        this._htmlLanguageObserver.disconnect();
+      }
+      return;
+    }
+
+    var html = document.querySelector('html');
+    if (html.lang === '') {
+      console.warn('AppLocalizeBehavior needs the lang attribute to be set on the html tag.');
+    }
+
+    if (!this._htmlLanguageObserver) {
+      this._htmlLanguageObserver = new MutationObserver(function() {
+        this.language = html.lang;
+      }.bind(this));
+    }
+
+    this._htmlLanguageObserver.observe(html, { attributes: true });
+    this.language = html.lang;
   },
 
   loadResources: function(path) {
