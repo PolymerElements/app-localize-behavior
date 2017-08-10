@@ -175,6 +175,16 @@ Polymer.AppLocalizeBehavior = {
     },
 
     /**
+     * If true, the browser language will be used per default.
+     * 'resources' have to include browser language key. 
+     * If not, HtmlLanguage will be used instead.
+     */
+    useBrowserLanguage: {
+      type: Boolean,
+      value: true
+    },
+
+    /**
      * The url of the locales.json file
      */
     resourceUrl: {
@@ -200,8 +210,23 @@ Polymer.AppLocalizeBehavior = {
 
   observers: [
     '__useHtmlLanguageChanged(useHtmlLanguage)',
+    '__useBrowserLanguageChanged(useBrowserLanguage, resources)',
     'loadResources(resourceUrl)'
   ],
+
+  __useBrowserLanguageChanged: function(useBrowserLanguage, resources) {
+    if (!useBrowserLanguage || !resources) {
+      return;
+    }
+
+    if (!this.resources[navigator.language]) {
+      return this.__setHtmlLanguage();
+    }
+
+    if (!this.language) {
+      this.language = navigator.language;
+    }
+  },
 
   __useHtmlLanguageChanged: function(useHtmlLanguage) {
     if (!useHtmlLanguage) {
@@ -211,9 +236,14 @@ Polymer.AppLocalizeBehavior = {
       return;
     }
 
+    this.__setHtmlLanguage();
+  },
+
+  __setHtmlLanguage: function() {
     var html = document.querySelector('html');
     if (html.lang === '') {
       console.warn('AppLocalizeBehavior needs the lang attribute to be set on the html tag.');
+      return;
     }
 
     if (!this.__htmlLanguageObserver) {
@@ -221,8 +251,8 @@ Polymer.AppLocalizeBehavior = {
         this.language = html.lang;
       }.bind(this));
     }
-
     this.__htmlLanguageObserver.observe(html, { attributes: true });
+
     this.language = html.lang;
   },
 
