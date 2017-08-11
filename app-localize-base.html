@@ -1,0 +1,97 @@
+<!--
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="intl-messageformat-import.html">
+
+<script>
+  (function() {
+    /**
+     * Internal singleton cache. This is the private implementation of the
+     * behaviour; don't interact with it directly.
+     */
+    var __localizationCache = {
+      requests: {},  /* One iron-request per unique resources path. */
+      messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
+      ajax: null     /* Global iron-ajax object used to request resource files. */
+    };
+
+    Polymer.__appLocalizeBase = {
+      loadResources: function(path) {
+        // If the global ajax object has not been initialized, initialize and cache it.
+        var ajax = __localizationCache.ajax;
+        if (!ajax) {
+          ajax = __localizationCache.ajax = document.createElement('iron-ajax');
+        }
+
+        var request = __localizationCache.requests[path];
+        if (!request) {
+          ajax.url = path;
+          var request = ajax.generateRequest();
+
+          request.completes.then(
+              this.__onRequestResponse.bind(this),
+              this.__onRequestError.bind(this));
+
+          // Cache the instance so that it can be reused if the same path is loaded.
+          __localizationCache.requests[path] = request;
+        } else {
+          request.completes.then(
+              this.__onRequestResponse.bind(this),
+              this.__onRequestError.bind(this));
+        }
+      },
+
+      /**
+       * Returns a computed `localize` method, based on the current `language`.
+       */
+      __computeLocalize: function(language, resources, formats) {
+        return function() {
+          var key = arguments[0];
+          if (!key || !resources || !language || !resources[language])
+            return;
+
+          // Cache the key/value pairs for the same language, so that we don't
+          // do extra work if we're just reusing strings across an application.
+          var translatedValue = resources[language][key];
+
+          if (!translatedValue) {
+            return this.useKeyIfMissing ? key : '';
+          }
+
+          var messageKey = key + translatedValue;
+          var translatedMessage = __localizationCache.messages[messageKey];
+
+          if (!translatedMessage) {
+            translatedMessage = new IntlMessageFormat(translatedValue, language, formats);
+            __localizationCache.messages[messageKey] = translatedMessage;
+          }
+
+          var args = {};
+          for (var i = 1; i < arguments.length; i += 2) {
+            args[arguments[i]] = arguments[i+1];
+          }
+
+          return translatedMessage.format(args);
+        };
+      },
+
+      __onRequestResponse: function(event) {
+        this.resources = event.response;
+        this.fire('app-localize-resources-loaded', event, { bubbles: this.bubbleEvent});
+      },
+
+      __onRequestError: function(event) {
+        this.fire('app-localize-resources-error');
+      }
+    };
+
+  })();
+</script>
