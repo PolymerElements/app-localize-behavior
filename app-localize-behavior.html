@@ -223,9 +223,7 @@ Polymer.AppLocalizeBehavior = {
       return this.__setHtmlLanguage();
     }
 
-    if (!this.language) {
-      this.language = navigator.language;
-    }
+    this.language = navigator.language;
   },
 
   __useHtmlLanguageChanged: function(useHtmlLanguage) {
