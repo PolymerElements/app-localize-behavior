@@ -52,6 +52,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 *        &lt;/script>
 *     </dom-module>
 *
+*
+* If the resources stored in your external file are in a different
+* format, you can pass `loadResources` an optional second parameter, a
+* preprocessing function to be called on the loaded data before setting
+* `resources` to the result. For example:
+*
+*     attached: function() {
+*       this.loadResources(
+*
+*         // Only contains the flattened "es" translations:
+*         'locales/es.json',  // {"hi": "hola", "bye": "chau"}
+*
+*         function preprocess(resources) {
+*           return {es: resources};  // unflatten: {"es": {"hi": "hola", ...}}
+*         }
+*       );
+*     }
+*
+*
 * Alternatively, you can also inline your resources inside the app itself:
 *
 *     <dom-module id="x-app">
@@ -172,7 +191,7 @@ Polymer.AppLocalizeBehavior = {
     }
   },
 
-  loadResources: function(path) {
+  loadResources: function(path, preprocessor) {
     var proto = this.constructor.prototype;
 
     // Check if localCache exist just in case.
@@ -185,19 +204,24 @@ Polymer.AppLocalizeBehavior = {
     }
 
     var request = proto.__localizationCache.requests[path];
+
+    function onRequestResponse(event) {
+      this.__onRequestResponse(event, preprocessor);
+    }
+
     if (!request) {
       ajax.url = path;
       var request = ajax.generateRequest();
 
       request.completes.then(
-          this.__onRequestResponse.bind(this),
+          onRequestResponse.bind(this),
           this.__onRequestError.bind(this));
 
       // Cache the instance so that it can be reused if the same path is loaded.
       proto.__localizationCache.requests[path] = request;
     } else {
       request.completes.then(
-          this.__onRequestResponse.bind(this),
+          onRequestResponse.bind(this),
           this.__onRequestError.bind(this));
     }
   },
@@ -247,8 +271,8 @@ Polymer.AppLocalizeBehavior = {
     };
   },
 
-  __onRequestResponse: function(event) {
-    this.resources = event.response;
+  __onRequestResponse: function(event, preprocessor) {
+    this.resources = preprocessor ? preprocessor(event.response) : event.response;
     this.fire('app-localize-resources-loaded', event, { bubbles: this.bubbleEvent});
   },
 
