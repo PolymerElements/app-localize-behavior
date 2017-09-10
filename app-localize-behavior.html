@@ -108,6 +108,57 @@ Polymer.AppLocalizeBehavior = {
    * @event app-localize-resources-error
    */
 
+  /**
+   * Helper function to choose the most preferred language from a set of
+   * available languages. Supply a lookUp function, that takes a language
+   * and returns the closest match you have available, as well as an optional
+   * list of preferred languages, ordered from most-to-least preferred. If no
+   * preferred languages are given, the navigator object is checked for the
+   * browser's language preferences.
+   *
+   * For example, if your app is available in 'en-CA' and 'fr-CA', and the
+   * user's browser is set to prefer ['es-ES', 'fr-FR', 'en-GB'], you could
+   * do the following in order to calculate that 'fr-CA' is the best language
+   * that you have available for this user:
+   *
+   * const AVAILABLE_LANGUAGES = ['en-CA', 'fr-CA'];
+   *
+   * function lookUp(language) {
+   *   language = language.toLowerCase();
+   *   for (const availableLanguage of AVAILABLE_LANGUAGES) {
+   *     const parts = availableLanguage.toLowerCase().split('-');
+   *     while (parts.length) {
+   *       const joined = parts.join('-');
+   *       if (language === joined) {
+   *         return availableLanguage;
+   *       }
+   *       parts.pop();
+   *     }
+   *   }
+   * }
+   *
+   * navigator.languages;        // -> ['es-ES', 'fr-FR', 'en-GB']
+   *
+   * negotiateLanguage(lookUp);  // -> 'fr-CA'
+   *
+   */
+  negotiateLanguage: function(lookUp, preferred) {
+    preferred = preferred || navigator.languages ||
+        [navigator.language || navigator.browserLanguage];
+    for (var i = 0; i < preferred.length; i++) {
+      var candidate = preferred[i];
+      var parts = candidate.split('-');
+      while (parts.length) {
+        var joined = parts.join('-');
+        var available = lookUp(joined);
+        if (available) {
+          return available;
+        }
+        parts.pop();
+      }
+    }
+  },
+
   properties: {
     /**
      * The language used for translation.
