@@ -254,35 +254,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('can call loadResources with merge=true to merge into existing resources', function(done) {
         var app = fixture('basic');
 
-        var onceSpanish, onceEnglish;
-        onceSpanish = new Promise(function(resolveSpanish) {
-          onceEnglish = new Promise(function(resolveEnglish) {
-            app.addEventListener('app-localize-resources-loaded', function(event) {
-              if (event.detail.url.indexOf('fragment.es.json') !== -1) {
-                resolveSpanish();
-              } else if (event.detail.url.indexOf('fragment.en.json') !== -1) {
-                resolveEnglish();
-              }
-            });
-          });
+        var fetchedSpanish, fetchedEnglish;
+
+        app.addEventListener('app-localize-resources-loaded', function(event) {
+          if (event.detail.url.indexOf('fragment.es.json') !== -1) {
+            fetchedSpanish = true;
+          } else if (event.detail.url.indexOf('fragment.en.json') !== -1) {
+            fetchedEnglish = true;
+          }
+          if (fetchedSpanish && fetchedEnglish) {
+            assert.equal(app.language, 'en');
+
+            // New resources have been loaded
+            assert.equal(app.localize('farewell'), 'goodbye');
+
+            // Old resources (inlined in x-translate.html) haven't been clobbered
+            assert.equal(app.localize('greeting'), 'hello');
+
+            // We can switch to Spanish and those have been merged in too
+            app.language = 'es';
+            assert.equal(app.localize('farewell'), 'chau');
+
+            done();
+          }
         });
-
-        Promise.all([onceSpanish, onceEnglish]).then(function() {
-          assert.equal(app.language, 'en');
-
-          // New resources have been loaded
-          assert.equal(app.localize('farewell'), 'goodbye');
-
-          // Old resources (inlined in x-translate.html) haven't been clobbered
-          assert.equal(app.localize('greeting'), 'hello');
-
-          // We can switch to Spanish and those have been merged in too
-          app.language = 'es';
-          assert.equal(app.localize('farewell'), 'chau');
-
-          done();
-        });
-
         app.loadResources(app.resolveUrl('fragment.es.json'), 'es', true);
         app.loadResources(app.resolveUrl('fragment.en.json'), 'en', true);
       });
