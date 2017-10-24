@@ -274,7 +274,11 @@ Polymer.AppLocalizeBehavior = {
         // use namesSpace multi level
         var translatedValue = resources[language][subKey[0]];
         for (var i=1; i<subKey.length; i++) {
-            translatedValue = translatedValue[subKey[i]];
+            if (translatedValue) {
+                translatedValue = translatedValue[subKey[i]];
+            } else {
+                break;
+            }
         }
       } else {
         var translatedValue = resources[language][key];
