@@ -222,6 +222,17 @@ Polymer.AppLocalizeBehavior = {
           this.__onRequestResponse.bind(this),
           this.__onRequestError.bind(this));
     }
+
+    let defaultPathTest = new RegExp(`\/(${this.defaultLanguage}.json)$`)
+    let defaultPath = path.replace(/\/\w+?\.json$/, `/${this.defaultLanguage}.json`);
+    if (
+      this.useDefaultLanguageIfMissing &&
+      this.defaultLanguage &&
+      !defaultPathTest.test(path) &&
+      !proto.__localizationCache.requests[defaultPath]
+    ) {
+      this.loadResources(defaultPath);
+    }
   },
 
   /**
