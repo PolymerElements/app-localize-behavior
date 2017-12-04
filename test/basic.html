@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../intl/locale-data/jsonp/fr.js"></script>
 
   <link rel="import" href="x-translate.html">
+  <link rel="import" href="x-translate-fallback.html">
   <link rel="import" href="x-translate2.html">
   <link rel="import" href="x-translate-only-imperative.html">
   <link rel="import" href="x-translate-l10n.html">
@@ -36,6 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="basic">
     <template>
       <x-translate></x-translate>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="fallback">
+    <template>
+      <x-translate-fallback></x-translate-fallback>
     </template>
   </test-fixture>
 
@@ -87,6 +94,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     suite('basic', function() {
+        test('uses fallback language, if translation is missing', function() {
+            var app = fixture('fallback');
+            assert.equal(app.language, 'fr');
+            assert.equal(app.fallbackLanguage, 'en');
+            assert.equal(app.$.fallback.innerHTML, 'français hello');
+
+        });
+
+
+
       test('can translate a basic string', function() {
         var app = fixture('basic');
 
@@ -98,6 +115,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(app.language, 'fr');
         assert.equal(app.$.output.innerHTML, 'bonjour');
       });
+
+
+
 
       test('can handle missing keys', function() {
         var app = fixture('missing');
