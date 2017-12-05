@@ -210,7 +210,7 @@ Polymer.AppLocalizeBehavior = {
      */
     localize: {
       type: Function,
-      computed: '__computeLocalize(language, fallbackLanguage, resources, formats)'
+      computed: '__computeLocalize(language, resources, formats)'
     },
 
     /**
@@ -260,8 +260,10 @@ Polymer.AppLocalizeBehavior = {
   /**
    * Returns a computed `localize` method, based on the current `language`.
    */
-  __computeLocalize: function(language, fallbackLanguage, resources, formats) {
+  __computeLocalize: function(language, resources, formats) {
     var proto = this.constructor.prototype;
+
+    var fallbackLanguage = this.fallbackLanguage;
 
     // Check if localCache exist just in case.
     this.__checkLocalizationCache(proto);

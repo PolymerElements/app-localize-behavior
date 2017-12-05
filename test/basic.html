@@ -93,7 +93,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       elem.constructor.prototype.__localizationCache.messages = {};
     }
 
-    suite('basic', function() {
+
+    suite('fallback', function(){
         test('uses fallback language, if translation is missing', function() {
             var app = fixture('fallback');
             assert.equal(app.language, 'fr');
@@ -101,8 +102,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             assert.equal(app.$.fallback.innerHTML, 'français hello');
 
         });
+    });
 
-
+    suite('basic', function() {
 
       test('can translate a basic string', function() {
         var app = fixture('basic');
