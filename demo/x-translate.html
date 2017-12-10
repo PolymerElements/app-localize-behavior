@@ -58,6 +58,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <code>localize('bananas', 'name', 'Robin', 'gender', 'other', 'num', 4)</code>
       </div>
     </div>
+
+
+    <h4>Structured locales</h4>
+    <div class="snippet">
+      <div class="demo">
+        <div>{{localize('fruits:apple', 'num', 0)}} / {{localize('fruit', 'num', 1)}}/ {{localize('fruit', 'num', 3)}}</div>
+      </div>
+      <div class="code-container">
+        <code>localize('fruits:apple', 'num', 0) / localize('fruits:apple', 'num', 1) / localize('fruits:apple', 'num', 3)</code>
+      </div>
+    </div>
   </template>
 
   <script>
