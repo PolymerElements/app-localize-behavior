@@ -215,15 +215,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       if (!localizationCache.ajax) {
         localizationCache.ajax = document.createElement('iron-ajax');
       }
-      const ajax = localizationCache.ajax;
 
       if (!localizationCache.requests[path]) {
-        ajax.url = path;
-        localizationCache.requests[path] = ajax.generateRequest();
+        // Cache the instance so that it can be reused if the same path is loaded.
+        localizationCache.ajax.url = path;
+        localizationCache.requests[path] = localizationCache.ajax.generateRequest();
       }
-      const request = localizationCache.requests[path];
 
-      request.completes.then(
+      localizationCache.requests[path].completes.then(
         event => this.__onRequestResponse(event, language, merge),
         this.__onRequestError.bind(this)
       );
@@ -233,6 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * Returns a computed `localize` method, based on the current `language`.
      */
     __computeLocalize: function (language, resources, formats) {
+      // Everytime any of the parameters change, invalidate the strings cache.
       localizationCache.messages = {};
 
       return function (key, ...args) {
