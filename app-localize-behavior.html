@@ -121,10 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   * @polymerBehavior Polymer.AppLocalizeBehavior
   */
 
-  /**
-   * Internal singleton cache. This is the private implementation of the
-   * behaviour; don't interact with it directly.
-   */
+  // Internal singleton cache. This is the private implementation of the behaviour
   const localizationCache = {
     requests: {},  /* One iron-request per unique resources path. */
     messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
@@ -133,6 +130,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   Polymer.AppLocalizeBehavior = {
 
+    /**
+     * Internal singleton cache. This is the private implementation of the behaviour;
+     * don't interact with it directly.
+     */
+    // make localizationCache accessible from outside for backward compatibility and passing tests
+    __localizationCache: localizationCache,
 
     /**
      * Fired after the resources have been loaded.
