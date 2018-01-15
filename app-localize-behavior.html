@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    * be found [here](https://github.com/andyearnshaw/Intl.js/).
    *
    * `Polymer.AppLocalizeBehavior` supports the same [message-syntax](http://formatjs.io/guides/message-syntax/)
-   * of format.js, in its entirety; use the library docs as reference for the
+   * of format.js, in its entirety; use the library docs as the reference for
    * available message formats and options.
    *
    * Sample application loading resources from an external file:
@@ -121,7 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    * @polymerBehavior Polymer.AppLocalizeBehavior
    */
 
-  // Internal singleton cache. This is the private implementation of the behaviour
+  // Internal singleton cache. This is the private implementation of the behavior
   const localizationCache = {
     requests: {},  /* One iron-request per unique resources path. */
     messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
@@ -131,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   Polymer.AppLocalizeBehavior = {
 
     /**
-     * Internal singleton cache. This is the private implementation of the behaviour;
+     * Internal singleton cache. This is the private implementation of the behavior;
      * don't interact with it directly.
      */
     // make localizationCache accessible from outside for backward compatibility and passing tests
