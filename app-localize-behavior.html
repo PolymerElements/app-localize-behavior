@@ -199,12 +199,94 @@ Polymer.AppLocalizeBehavior = {
     },
 
     /**
+     * If true, the global language attribute on the html tag
+     * will be used as the default language value.
+     * Use document.documentElement.lang = "de" to change the language 
+     * of the entire app.
+     */
+    useHtmlLanguage: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, the browser language will be used per default.
+     * 'resources' have to include browser language key. 
+     * If not, HtmlLanguage will be used instead.
+     */
+    useBrowserLanguage: {
+      type: Boolean,
+      value: true
+    },
+
+    /**
+     * The url of the locales.json file
+     */
+    resourceUrl: {
+      type: String
+    },
+
+    /**
     * If true, will bubble up the event to the parents
     */
     bubbleEvent: {
       type: Boolean,
       value: false
+    },
+
+    /**
+     * The instance of the 'lang' attribute observer 
+     * of the html tag.
+     */
+    ___htmlLanguageObserver: {
+      type: Object
     }
+  },
+
+  observers: [
+    '__useHtmlLanguageChanged(useHtmlLanguage)',
+    '__useBrowserLanguageChanged(useBrowserLanguage, resources)',
+    'loadResources(resourceUrl)'
+  ],
+
+  __useBrowserLanguageChanged: function(useBrowserLanguage, resources) {
+    if (!useBrowserLanguage || !resources) {
+      return;
+    }
+
+    if (!this.resources[navigator.language]) {
+      return this.__setHtmlLanguage();
+    }
+
+    this.language = navigator.language;
+  },
+
+  __useHtmlLanguageChanged: function(useHtmlLanguage) {
+    if (!useHtmlLanguage) {
+      if (this.__htmlLanguageObserver) {
+        this.__htmlLanguageObserver.disconnect();
+      }
+      return;
+    }
+
+    this.__setHtmlLanguage();
+  },
+
+  __setHtmlLanguage: function() {
+    var html = document.querySelector('html');
+    if (html.lang === '') {
+      console.warn('AppLocalizeBehavior needs the lang attribute to be set on the html tag.');
+      return;
+    }
+
+    if (!this.__htmlLanguageObserver) {
+      this.__htmlLanguageObserver = new MutationObserver(function() {
+        this.language = html.lang;
+      }.bind(this));
+    }
+    this.__htmlLanguageObserver.observe(html, { attributes: true });
+
+    this.language = html.lang;
   },
 
   loadResources: function(path, language, merge) {
