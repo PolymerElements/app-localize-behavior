@@ -10,7 +10,7 @@
 
 /// <reference path="../polymer/types/polymer.d.ts" />
 /// <reference path="../iron-ajax/iron-ajax.d.ts" />
-/// <reference path="../intl-messageformat/dist/intl-messageformat.min.d.ts" />
+/// <reference path="extra-types.d.ts" />
 
 declare namespace Polymer {
 
