@@ -1,0 +1,10 @@
+{
+  "name": "@polymer/app-localize-behavior",
+  "private": true,
+  "description": "A behavior to help with internationalizating apps",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/polymerelements/app-localize-behavior"
+  },
+  "license": "BSD-3-Clause"
+}
