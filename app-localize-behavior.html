@@ -260,7 +260,7 @@ Polymer.AppLocalizeBehavior = {
     return function() {
       var key = arguments[0];
       if (!key || !resources || !language || !resources[language])
-        return;
+        return (key && this.useKeyIfMissing) ? key : undefined;
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
