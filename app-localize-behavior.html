@@ -15,6 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 (function() {
 
+// This isn't a complete `Object.assign` polyfill, but this element expects
+// JSON and doesn't provide more than one source object.
 var assign = Object.assign ? Object.assign.bind(Object) : function(destination, source) {
   for (var prop in source) {
     if (source.hasOwnProperty(prop)) {
