@@ -13,6 +13,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../intl-messageformat/dist/intl-messageformat.min.js"></script>
 
 <script>
+(function() {
+
+var assign = Object.assign ? Object.assign.bind(Object) : function(destination, source) {
+  for (var prop in source) {
+    if (source.hasOwnProperty(prop)) {
+      destination[prop] = source[prop];
+    }
+  }
+
+  return destination;
+};
 
 /**
 * `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
@@ -292,11 +303,11 @@ Polymer.AppLocalizeBehavior = {
     var newResources = event.response;
     if (merge) {
       if (language) {
-        propertyUpdates.resources = Object.assign({}, this.resources || {});
-        propertyUpdates['resources.' + language] = Object.assign(
+        propertyUpdates.resources = assign({}, this.resources || {});
+        propertyUpdates['resources.' + language] = assign(
           propertyUpdates.resources[language] || {}, newResources);
       } else {
-        propertyUpdates.resources = Object.assign(this.resources, newResources);
+        propertyUpdates.resources = assign(this.resources, newResources);
       }
     } else {
       if (language) {
@@ -330,6 +341,7 @@ Polymer.AppLocalizeBehavior = {
       proto['__localizationCache'] = {requests: {}, messages: {}, ajax: null};
     }
   }
-}
+};
 
+})();
 </script>
