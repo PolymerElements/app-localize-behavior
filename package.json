@@ -26,11 +26,11 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@polymer/iron-ajax": "^3.0.0-pre.20",
-    "intl-messageformat": "^2.2.0",
     "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
     "intl": "^1.2.0",
+    "intl-messageformat": "^2.2.0",
     "@polymer/iron-component-page": "^3.0.0-pre.20",
     "@polymer/iron-demo-helpers": "^3.0.0-pre.20",
     "@polymer/paper-toggle-button": "^3.0.0-pre.20",
