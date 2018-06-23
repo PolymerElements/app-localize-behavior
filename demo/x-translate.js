@@ -1,4 +1,4 @@
-<!--
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,15 +6,16 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+*/
+import '@polymer/polymer/polymer-legacy.js';
 
-<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../app-localize-behavior.html">
-<link rel="import" href="common-styles.html">
-
-<dom-module id="x-translate">
-  <template>
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import { AppLocalizeBehavior } from '../app-localize-behavior.js';
+import './common-styles.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+Polymer({
+  _template: html`
     <style include="common-styles"></style>
 
     <div class="lang">
@@ -57,41 +58,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <code>localize('bananas', 'name', 'Robin', 'gender', 'other', 'num', 4)</code>
       </div>
     </div>
-  </template>
+`,
 
-  <script>
-    Polymer({
-      is: "x-translate",
+  is: "x-translate",
 
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
+  behaviors: [
+    AppLocalizeBehavior
+  ],
 
-      properties: {
-        /* Overriden from AppLocalizeBehavior */
-        language: {
-          value: 'en',
-          type: String
-        },
+  properties: {
+    /* Overriden from AppLocalizeBehavior */
+    language: {
+      value: 'en',
+      type: String
+    },
 
-        /* Overriden from AppLocalizeBehavior */
-        formats: {
-          type: Object,
-          value: function() {
-            return {
-              number: { USD: { style: 'currency', currency: 'USD' } }
-            };
-          }
-        }
-      },
-
-      attached: function() {
-        this.loadResources(this.resolveUrl('locales.json'));
-      },
-
-      _toggle: function() {
-        this.language = this.$.switch.checked ? 'fr' : 'en';
+    /* Overriden from AppLocalizeBehavior */
+    formats: {
+      type: Object,
+      value: function() {
+        return {
+          number: { USD: { style: 'currency', currency: 'USD' } }
+        };
       }
-    });
-  </script>
-</dom-module>
+    }
+  },
+
+  attached: function() {
+    this.loadResources(this.resolveUrl('locales.json'));
+  },
+
+  _toggle: function() {
+    this.language = this.$.switch.checked ? 'fr' : 'en';
+  }
+});

@@ -1,0 +1,54 @@
+{
+  "files": {
+    "app-localize-behavior.html": {
+      "convertedUrl": "app-localize-behavior.js",
+      "exports": {
+        "Polymer.AppLocalizeBehavior": "AppLocalizeBehavior"
+      }
+    },
+    "index.html": {
+      "convertedUrl": "index.html",
+      "exports": {}
+    },
+    "demo/index.html": {
+      "convertedUrl": "demo/index.html",
+      "exports": {}
+    },
+    "demo/x-translate.html": {
+      "convertedUrl": "demo/x-translate.js",
+      "exports": {}
+    },
+    "demo/common-styles.html": {
+      "convertedUrl": "demo/common-styles.js",
+      "exports": {}
+    },
+    "demo/x-local-translate.html": {
+      "convertedUrl": "demo/x-local-translate.js",
+      "exports": {}
+    },
+    "test/basic.html": {
+      "convertedUrl": "test/basic.html",
+      "exports": {}
+    },
+    "test/x-translate.html": {
+      "convertedUrl": "test/x-translate.js",
+      "exports": {}
+    },
+    "test/x-translate2.html": {
+      "convertedUrl": "test/x-translate2.js",
+      "exports": {}
+    },
+    "test/x-translate-only-imperative.html": {
+      "convertedUrl": "test/x-translate-only-imperative.js",
+      "exports": {}
+    },
+    "test/x-translate-l10n.html": {
+      "convertedUrl": "test/x-translate-l10n.js",
+      "exports": {}
+    },
+    "test/index.html": {
+      "convertedUrl": "test/index.html",
+      "exports": {}
+    }
+  }
+}
