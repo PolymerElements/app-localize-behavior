@@ -12,12 +12,12 @@ found at http://polymer.github.io/PATENTS.txt
 import '@polymer/polymer/polymer-legacy.js';
 import '@polymer/paper-styles/shadow.js';
 import '@polymer/paper-styles/typography.js';
-import '@polymer/iron-demo-helpers/demo-snippet.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
 const template = html`
 <dom-module id="common-styles">
   <template>
-    <style include="demo-snippet">
+    <style>
       :host {
         @apply --shadow-none;
         @apply --paper-font-common-base;
@@ -28,6 +28,17 @@ const template = html`
 
       .snippet {
         @apply --shadow-elevation-2dp;
+      }
+
+      .code-container {
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      .demo {
+        border-bottom: 1px solid #e0e0e0;
+        background-color: white;
+        padding: 20px;
       }
 
       paper-toggle-button {

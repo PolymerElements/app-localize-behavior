@@ -9,7 +9,6 @@ part of the polymer project is also subject to an additional IP rights grant
 found at http://polymer.github.io/PATENTS.txt
 */
 import '@polymer/polymer/polymer-legacy.js';
-
 import '@polymer/iron-ajax/iron-ajax.js';
 
 // This isn't a complete `Object.assign` polyfill, but this element expects
