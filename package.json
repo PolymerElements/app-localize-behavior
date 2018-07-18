@@ -26,6 +26,7 @@
     "format": "webmat"
   },
   "devDependencies": {
+    "intl": "^1.2.0",
     "@polymer/paper-toggle-button": "^3.0.0-pre.20",
     "@polymer/paper-styles": "^3.0.0-pre.20",
     "wct-browser-legacy": "^1.0.1",
