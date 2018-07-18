@@ -1,11 +1,12 @@
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
 import '@polymer/polymer/polymer-legacy.js';
 
@@ -13,131 +14,135 @@ import '@polymer/iron-ajax/iron-ajax.js';
 
 // This isn't a complete `Object.assign` polyfill, but this element expects
 // JSON and doesn't provide more than one source object.
-var assign = Object.assign ? Object.assign.bind(Object) : function(destination, source) {
-  for (var prop in source) {
-    if (source.hasOwnProperty(prop)) {
-      destination[prop] = source[prop];
-    }
-  }
+var assign =
+    Object.assign ? Object.assign.bind(Object) : function(destination, source) {
+      for (var prop in source) {
+        if (source.hasOwnProperty(prop)) {
+          destination[prop] = source[prop];
+        }
+      }
 
-  return destination;
-};
+      return destination;
+    };
 
 /**
-* `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
-* help you internationalize your application. Note that if you're on a browser that
-* does not natively support the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
-* object, you must load the polyfill yourself. An example polyfill can
-* be found [here](https://github.com/andyearnshaw/Intl.js/).
-*
-* `Polymer.AppLocalizeBehavior` supports the same [message-syntax](http://formatjs.io/guides/message-syntax/)
-* of format.js, in its entirety; use the library docs as reference for the
-* available message formats and options.
-*
-* Sample application loading resources from an external file:
-*
-*     <dom-module id="x-app">
-*        <template>
-*         <div>{{localize('hello', 'name', 'Batman')}}</div>
-*        </template>
-*        <script>
-*           Polymer({
-*             is: "x-app",
-*
-*             behaviors: [
-*               Polymer.AppLocalizeBehavior
-*             ],
-*
-*             properties: {
-*               language: {
-*                 value: 'en'
-*               },
-*             }
-*
-*             attached: function() {
-*               this.loadResources(this.resolveUrl('locales.json'));
-*             },
-*           });
-*        &lt;/script>
-*     </dom-module>
-*
-*
-* If the resources stored in your external file are for a single language and
-* so are not nested inside any language keys, you can pass an optional
-* `language` parameter to store the fetched resources inside that key.
-*
-* This complements the optional third parameter, `merge`, nicely: If you pass
-* `merge = true`, the fetched resources will be merged into any existing
-* resources rather than clobbering them.
-*
-* This is also useful for storing resources for different parts of a page that
-* the user might or might not see at the same time in different files, so that
-* the user can fetch only the needed resources on-demand, and doesn't have to
-* load any resources they'll never see anyway. For example, you could store
-* your resources for your global nav, homepage, and FAQ page in 3 different
-* files. When a user requests the homepage, both the global nav and the
-* homepage resources are fetched and merged together, since they both appear
-* on the page at the same time, but you spare the user from fetching the
-* unneeded FAQ resources.
-*
-*
-* Example:
-*
-*     attached: function() {
-*       this.loadResources(
-*
-*         // Only contains the flattened "es" translations:
-*         'locales/es.json',  // {"hi": "hola"}
-*
-*         'es',               // unflatten -> {"es": {"hi": "hola"}}
-*
-*         true                // merge so existing resources won't be clobbered
-*       );
-*     }
-*
-*
-* Alternatively, you can also inline your resources inside the app itself:
-*
-*     <dom-module id="x-app">
-*        <template>
-*         <div>{{localize('hello', 'name', 'Batman')}}</div>
-*        </template>
-*        <script>
-*           Polymer({
-*             is: "x-app",
-*
-*             behaviors: [
-*               Polymer.AppLocalizeBehavior
-*             ],
-*
-*             properties: {
-*               language: {
-*                 value: 'en'
-*               },
-*               resources: {
-*                 value: function() {
-*                   return {
-*                     'en': { 'hello': 'My name is {name}.' },
-*                     'fr': { 'hello': 'Je m\'appelle {name}.' }
-*                   }
-*               }
-*             }
-*           });
-*        &lt;/script>
-*     </dom-module>
-*
-* @demo demo/index.html
-* @polymerBehavior Polymer.AppLocalizeBehavior
-*/
+ * `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/)
+ * library to help you internationalize your application. Note that if you're on
+ * a browser that does not natively support the
+ * [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+ * object, you must load the polyfill yourself. An example polyfill can
+ * be found [here](https://github.com/andyearnshaw/Intl.js/).
+ *
+ * `Polymer.AppLocalizeBehavior` supports the same
+ * [message-syntax](http://formatjs.io/guides/message-syntax/) of format.js, in
+ * its entirety; use the library docs as reference for the available message
+ * formats and options.
+ *
+ * Sample application loading resources from an external file:
+ *
+ *     <dom-module id="x-app">
+ *        <template>
+ *         <div>{{localize('hello', 'name', 'Batman')}}</div>
+ *        </template>
+ *        <script>
+ *           Polymer({
+ *             is: "x-app",
+ *
+ *             behaviors: [
+ *               Polymer.AppLocalizeBehavior
+ *             ],
+ *
+ *             properties: {
+ *               language: {
+ *                 value: 'en'
+ *               },
+ *             }
+ *
+ *             attached: function() {
+ *               this.loadResources(this.resolveUrl('locales.json'));
+ *             },
+ *           });
+ *        &lt;/script>
+ *     </dom-module>
+ *
+ *
+ * If the resources stored in your external file are for a single language and
+ * so are not nested inside any language keys, you can pass an optional
+ * `language` parameter to store the fetched resources inside that key.
+ *
+ * This complements the optional third parameter, `merge`, nicely: If you pass
+ * `merge = true`, the fetched resources will be merged into any existing
+ * resources rather than clobbering them.
+ *
+ * This is also useful for storing resources for different parts of a page that
+ * the user might or might not see at the same time in different files, so that
+ * the user can fetch only the needed resources on-demand, and doesn't have to
+ * load any resources they'll never see anyway. For example, you could store
+ * your resources for your global nav, homepage, and FAQ page in 3 different
+ * files. When a user requests the homepage, both the global nav and the
+ * homepage resources are fetched and merged together, since they both appear
+ * on the page at the same time, but you spare the user from fetching the
+ * unneeded FAQ resources.
+ *
+ *
+ * Example:
+ *
+ *     attached: function() {
+ *       this.loadResources(
+ *
+ *         // Only contains the flattened "es" translations:
+ *         'locales/es.json',  // {"hi": "hola"}
+ *
+ *         'es',               // unflatten -> {"es": {"hi": "hola"}}
+ *
+ *         true                // merge so existing resources won't be clobbered
+ *       );
+ *     }
+ *
+ *
+ * Alternatively, you can also inline your resources inside the app itself:
+ *
+ *     <dom-module id="x-app">
+ *        <template>
+ *         <div>{{localize('hello', 'name', 'Batman')}}</div>
+ *        </template>
+ *        <script>
+ *           Polymer({
+ *             is: "x-app",
+ *
+ *             behaviors: [
+ *               Polymer.AppLocalizeBehavior
+ *             ],
+ *
+ *             properties: {
+ *               language: {
+ *                 value: 'en'
+ *               },
+ *               resources: {
+ *                 value: function() {
+ *                   return {
+ *                     'en': { 'hello': 'My name is {name}.' },
+ *                     'fr': { 'hello': 'Je m\'appelle {name}.' }
+ *                   }
+ *               }
+ *             }
+ *           });
+ *        &lt;/script>
+ *     </dom-module>
+ *
+ * @demo demo/index.html
+ * @polymerBehavior Polymer.AppLocalizeBehavior
+ */
 export const AppLocalizeBehavior = {
   /**
    * Internal singleton cache. This is the private implementation of the
    * behaviour; don't interact with it directly.
    */
   __localizationCache: {
-    requests: {},  /* One iron-request per unique resources path. */
-    messages: {},  /* Unique localized strings. Invalidated when the language, formats or resources change. */
-    ajax: null     /* Global iron-ajax object used to request resource files. */
+    requests: {}, /* One iron-request per unique resources path. */
+    messages: {}, /* Unique localized strings. Invalidated when the language,
+                     formats or resources change. */
+    ajax: null    /* Global iron-ajax object used to request resource files. */
   },
 
   /**
@@ -156,9 +161,7 @@ export const AppLocalizeBehavior = {
     /**
      * The language used for translation.
      */
-    language: {
-      type: String
-    },
+    language: {type: String},
 
     /**
      * The dictionary of localized messages, for each of the languages that
@@ -170,9 +173,7 @@ export const AppLocalizeBehavior = {
      *  'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
      * }
      */
-    resources: {
-      type: Object
-    },
+    resources: {type: Object},
 
     /**
      * Optional dictionary of user defined formats, as explained here:
@@ -185,17 +186,17 @@ export const AppLocalizeBehavior = {
      */
     formats: {
       type: Object,
-      value: function() { return {} }
+      value: function() {
+        return {
+        }
+      }
     },
 
     /**
      * If true, will use the provided key when
      * the translation does not exist for that key.
      */
-    useKeyIfMissing: {
-      type: Boolean,
-      value: false
-    },
+    useKeyIfMissing: {type: Boolean, value: false},
 
     /**
      * Translates a string to the current `language`. Any parameters to the
@@ -208,12 +209,9 @@ export const AppLocalizeBehavior = {
     },
 
     /**
-    * If true, will bubble up the event to the parents
-    */
-    bubbleEvent: {
-      type: Boolean,
-      value: false
-    }
+     * If true, will bubble up the event to the parents
+     */
+    bubbleEvent: {type: Boolean, value: false}
   },
 
   loadResources: function(path, language, merge) {
@@ -222,10 +220,12 @@ export const AppLocalizeBehavior = {
     // Check if localCache exist just in case.
     this.__checkLocalizationCache(proto);
 
-    // If the global ajax object has not been initialized, initialize and cache it.
+    // If the global ajax object has not been initialized, initialize and cache
+    // it.
     var ajax = proto.__localizationCache.ajax;
     if (!ajax) {
-      ajax = proto.__localizationCache.ajax = document.createElement('iron-ajax');
+      ajax = proto.__localizationCache.ajax =
+          document.createElement('iron-ajax');
     }
 
     var request = proto.__localizationCache.requests[path];
@@ -239,15 +239,13 @@ export const AppLocalizeBehavior = {
       var request = ajax.generateRequest();
 
       request.completes.then(
-          onRequestResponse.bind(this),
-          this.__onRequestError.bind(this));
+          onRequestResponse.bind(this), this.__onRequestError.bind(this));
 
       // Cache the instance so that it can be reused if the same path is loaded.
       proto.__localizationCache.requests[path] = request;
     } else {
       request.completes.then(
-          onRequestResponse.bind(this),
-          this.__onRequestError.bind(this));
+          onRequestResponse.bind(this), this.__onRequestError.bind(this));
     }
   },
 
@@ -283,13 +281,14 @@ export const AppLocalizeBehavior = {
       var translatedMessage = proto.__localizationCache.messages[messageKey];
 
       if (!translatedMessage) {
-        translatedMessage = new IntlMessageFormat(translatedValue, language, formats);
+        translatedMessage =
+            new IntlMessageFormat(translatedValue, language, formats);
         proto.__localizationCache.messages[messageKey] = translatedMessage;
       }
 
       var args = {};
       for (var i = 1; i < arguments.length; i += 2) {
-        args[arguments[i]] = arguments[i+1];
+        args[arguments[i]] = arguments[i + 1];
       }
 
       return translatedMessage.format(args);
@@ -302,8 +301,8 @@ export const AppLocalizeBehavior = {
     if (merge) {
       if (language) {
         propertyUpdates.resources = assign({}, this.resources || {});
-        propertyUpdates['resources.' + language] = assign(
-          propertyUpdates.resources[language] || {}, newResources);
+        propertyUpdates['resources.' + language] =
+            assign(propertyUpdates.resources[language] || {}, newResources);
       } else {
         propertyUpdates.resources = assign(this.resources, newResources);
       }
@@ -323,7 +322,8 @@ export const AppLocalizeBehavior = {
         this.set(key, propertyUpdates[key]);
       }
     }
-    this.fire('app-localize-resources-loaded', event, {bubbles: this.bubbleEvent});
+    this.fire(
+        'app-localize-resources-loaded', event, {bubbles: this.bubbleEvent});
   },
 
   __onRequestError: function(event) {
@@ -332,10 +332,11 @@ export const AppLocalizeBehavior = {
 
   __checkLocalizationCache: function(proto) {
     // do nothing if proto is undefined.
-    if(proto === undefined) return;
+    if (proto === undefined)
+      return;
 
     // In the event proto not have __localizationCache object, create it.
-    if(proto['__localizationCache'] === undefined) {
+    if (proto['__localizationCache'] === undefined) {
       proto['__localizationCache'] = {requests: {}, messages: {}, ajax: null};
     }
   }
