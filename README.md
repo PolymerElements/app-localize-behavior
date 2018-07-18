@@ -1,91 +1,97 @@
-
-<!---
-
-This README is automatically generated from the comments in these files:
-app-localize-behavior.html
-
-Edit those files, and our readme bot will duplicate them over here!
-Edit this file, and the bot will squash your changes :)
-
-The bot does some handling of markdown. Please file a bug if it does the wrong
-thing! https://github.com/PolymerLabs/tedium/issues
-
--->
-
+[![Published on NPM](https://img.shields.io/npm/v/@polymer/app-localize-behavior.svg)](https://www.npmjs.com/package/@polymer/app-localize-behavior)
 [![Build status](https://travis-ci.org/PolymerElements/app-localize-behavior.svg?branch=master)](https://travis-ci.org/PolymerElements/app-localize-behavior)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://webcomponents.org/element/@polymer/app-localize-behavior)
 
-
-## Polymer.AppLocalizeBehavior
-
-`Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/) library to
+## &lt;app-localize-behavior&gt;
+`app-localize-behavior` is a behavior that wraps the [format.js](http://formatjs.io/) library to
 help you internationalize your application. Note that if you're on a browser that
 does not natively support the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
 object, you must load the polyfill yourself. An example polyfill can
 be found [here](https://github.com/andyearnshaw/Intl.js/).
 
-`Polymer.AppLocalizeBehavior` supports the same [message-syntax](http://formatjs.io/guides/message-syntax/)
-of format.js, in its entirety; use the library docs as reference for the
-available message formats and options.
+See: [Documentation](https://www.webcomponents.org/element/@polymer/app-localize-behavior),
+  [Demo](https://www.webcomponents.org/element/@polymer/app-localize-behavior/demo/demo/index.html).
 
-Sample application loading resources from an external file:
+## Usage
 
-```html
-<dom-module id="x-app">
-   <template>
-    <div>{{localize('hello', 'name', 'Batman')}}</div>
-   </template>
-   <script>
-      Polymer({
-        is: "x-app",
-
-        behaviors: [
-          Polymer.AppLocalizeBehavior
-        ],
-
-        properties: {
-          language: {
-            value: 'en'
-          },
-        }
-
-        attached: function() {
-          this.loadResources(this.resolveUrl('locales.json'));
-        },
-      });
-   &lt;/script>
-</dom-module>
+### Installation
+```
+npm install --save @polymer/app-localize-behavior
 ```
 
-Alternatively, you can also inline your resources inside the app itself:
-
+### In an html file using the localized element
 ```html
-<dom-module id="x-app">
-   <template>
-    <div>{{localize('hello', 'name', 'Batman')}}</div>
-   </template>
-   <script>
-      Polymer({
-        is: "x-app",
+<html>
+  <head>
+    <!-- You MUST import this library first for the behaviour to work -->
+    <script src="../node_modules/intl-messageformat/dist/intl-messageformat.js"></script>
 
-        behaviors: [
-          Polymer.AppLocalizeBehavior
-        ],
+    <!-- Optional: Intl polyfill -->
+    <script src="https://unpkg.com/intl@1.2.5/dist/Intl.min.js"></script>
+    <script src="https://unpkg.com/intl@1.2.5/locale-data/jsonp/en.js"></script>
+    <script src="https://unpkg.com/intl@1.2.5/locale-data/jsonp/fr.js"></script>
 
-        properties: {
-          language: {
-            value: 'en'
-          },
-          resources: {
-            value: function() {
-              return {
-                'en': { 'hello': 'My name is {name}.' },
-                'fr': { 'hello': 'Je m\'apelle {name}.' }
-              }
-          }
-        }
-      });
-   &lt;/script>
-</dom-module>
+    <!-- Elements using the behaviour -->
+    <script type="module" src="sample-element.js"></script>
+  </head>
+  <body>
+    <sample-element></sample-element>
+  </body>
+</html>
 ```
 
+### Localizing a Polymer 3 element
+```js
+import {PolymerElement, html} from '@polymer/polymer';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {AppLocalizeBehavior} from '@polymer/app-localize-behavior/app-localize-behavior.js';
 
+class SampleElement extends  extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
+  static get template() {
+    return html`
+      <div>{{localize('hello', 'name', 'Batman')}}</div>
+    `;
+
+    static get properties() {
+      return {
+        language: { value: 'en' },
+      }
+    }
+
+    function attached() {
+      this.loadResources(this.resolveUrl('locales.json'));
+    }
+  }
+}
+customElements.define('sample-element', SampleElement);
+```
+## Changes in 3.0
+If you've used this element in previous versions, the only notable change is that now
+you **must** include the `IntlMessageFormat` library yourself -- this is because
+it is an older library that was not written in a module-friendly way, and cannot
+be used inside of a ES module (since it uses the `this` object, which is
+not defined).
+
+This is shown both in the code snippet above, and the [demo](https://github.com/PolymerElements/app-localize-behavior/blob/master/demo/index.html).
+## Contributing
+If you want to send a PR to this element, here are
+the instructions for running the tests and demo locally:
+
+### Installation
+```sh
+git clone https://github.com/PolymerElements/app-localize-behavior
+cd app-localize-behavior
+npm install
+npm install -g polymer-cli
+```
+
+### Running the demo locally
+```sh
+polymer serve --npm
+open http://127.0.0.1:<port>/demo/
+```
+
+### Running the tests
+```sh
+polymer test --npm
+```
