@@ -25,117 +25,115 @@ var assign =
     };
 
 /**
- * `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/)
- * library to help you internationalize your application. Note that if you're on
- * a browser that does not natively support the
- * [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
- * object, you must load the polyfill yourself. An example polyfill can
- * be found [here](https://github.com/andyearnshaw/Intl.js/).
- *
- * `Polymer.AppLocalizeBehavior` supports the same
- * [message-syntax](http://formatjs.io/guides/message-syntax/) of format.js, in
- * its entirety; use the library docs as reference for the available message
- * formats and options.
- *
- * Sample application loading resources from an external file:
- *
- *     <dom-module id="x-app">
- *        <template>
- *         <div>{{localize('hello', 'name', 'Batman')}}</div>
- *        </template>
- *        <script>
- *           Polymer({
- *             is: "x-app",
- *
- *             behaviors: [
- *               Polymer.AppLocalizeBehavior
- *             ],
- *
- *             properties: {
- *               language: {
- *                 value: 'en'
- *               },
- *             }
- *
- *             attached: function() {
- *               this.loadResources(this.resolveUrl('locales.json'));
- *             },
- *           });
- *        &lt;/script>
- *     </dom-module>
- *
- *
- * If the resources stored in your external file are for a single language and
- * so are not nested inside any language keys, you can pass an optional
- * `language` parameter to store the fetched resources inside that key.
- *
- * This complements the optional third parameter, `merge`, nicely: If you pass
- * `merge = true`, the fetched resources will be merged into any existing
- * resources rather than clobbering them.
- *
- * This is also useful for storing resources for different parts of a page that
- * the user might or might not see at the same time in different files, so that
- * the user can fetch only the needed resources on-demand, and doesn't have to
- * load any resources they'll never see anyway. For example, you could store
- * your resources for your global nav, homepage, and FAQ page in 3 different
- * files. When a user requests the homepage, both the global nav and the
- * homepage resources are fetched and merged together, since they both appear
- * on the page at the same time, but you spare the user from fetching the
- * unneeded FAQ resources.
- *
- *
- * Example:
- *
- *     attached: function() {
- *       this.loadResources(
- *
- *         // Only contains the flattened "es" translations:
- *         'locales/es.json',  // {"hi": "hola"}
- *
- *         'es',               // unflatten -> {"es": {"hi": "hola"}}
- *
- *         true                // merge so existing resources won't be clobbered
- *       );
- *     }
- *
- *
- * Alternatively, you can also inline your resources inside the app itself:
- *
- *     <dom-module id="x-app">
- *        <template>
- *         <div>{{localize('hello', 'name', 'Batman')}}</div>
- *        </template>
- *        <script>
- *           Polymer({
- *             is: "x-app",
- *
- *             behaviors: [
- *               Polymer.AppLocalizeBehavior
- *             ],
- *
- *             properties: {
- *               language: {
- *                 value: 'en'
- *               },
- *               resources: {
- *                 value: function() {
- *                   return {
- *                     'en': { 'hello': 'My name is {name}.' },
- *                     'fr': { 'hello': 'Je m\'appelle {name}.' }
- *                   }
- *               }
- *             }
- *           });
- *        &lt;/script>
- *     </dom-module>
- *
- * @demo demo/index.html
- * @polymerBehavior Polymer.AppLocalizeBehavior
+ `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/)
+ library to help you internationalize your application. Note that if you're on
+ a browser that does not natively support the
+ [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+ object, you must load the polyfill yourself. An example polyfill can
+ be found [here](https://github.com/andyearnshaw/Intl.js/).
+
+ `Polymer.AppLocalizeBehavior` supports the same
+ [message-syntax](http://formatjs.io/guides/message-syntax/) of format.js, in
+ its entirety; use the library docs as reference for the available message
+ formats and options.
+
+ Sample application loading resources from an external file:
+
+     import {PolymerElement, html} from '@polymer/polymer';
+     import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+     import {AppLocalizeBehavior} from
+ '@polymer/app-localize-behavior/app-localize-behavior.js';
+
+     class SampleElement extends  extends mixinBehaviors(
+         [AppLocalizeBehavior], PolymerElement) {
+       static get template() {
+         return html`
+           <div>{{localize('hello', 'name', 'Batman')}}</div>
+         `;
+       }
+       static get properties() {
+         return {
+           language: { value: 'en' },
+         }
+       }
+
+       function attached() {
+         this.loadResources(this.resolveUrl('locales.json'));
+       }
+     }
+     customElements.define('sample-element', SampleElement);
+
+ If the resources stored in your external file are for a single language and
+ so are not nested inside any language keys, you can pass an optional
+ `language` parameter to store the fetched resources inside that key.
+
+ This complements the optional third parameter, `merge`, nicely: If you pass
+ `merge = true`, the fetched resources will be merged into any existing
+ resources rather than clobbering them.
+
+ This is also useful for storing resources for different parts of a page that
+ the user might or might not see at the same time in different files, so that
+ the user can fetch only the needed resources on-demand, and doesn't have to
+ load any resources they'll never see anyway. For example, you could store
+ your resources for your global nav, homepage, and FAQ page in 3 different
+ files. When a user requests the homepage, both the global nav and the
+ homepage resources are fetched and merged together, since they both appear
+ on the page at the same time, but you spare the user from fetching the
+ unneeded FAQ resources.
+
+
+ Example:
+
+     attached: function() {
+       this.loadResources(
+         // Only contains the flattened "es" translations:
+         'locales/es.json',  // {"hi": "hola"}
+         'es',               // unflatten -> {"es": {"hi": "hola"}}
+         true                // merge so existing resources won't be clobbered
+       );
+     }
+
+ Alternatively, you can also inline your resources inside the app itself:
+
+     import {PolymerElement, html} from '@polymer/polymer';
+     import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+     import {AppLocalizeBehavior} from
+ '@polymer/app-localize-behavior/app-localize-behavior.js';
+
+     class SampleElement extends  extends mixinBehaviors(
+         [AppLocalizeBehavior], PolymerElement) {
+       static get template() {
+         return html`
+           <div>{{localize('hello', 'name', 'Batman')}}</div>
+         `;
+       }
+
+       static get properties() {
+         return {
+           language: { value: 'en' },
+           resources: {
+             value: function() {
+               return {
+                 'en': { 'hello': 'My name is {name}.' },
+                 'fr': { 'hello': 'Je m\'appelle {name}.' }
+               }
+           },
+         }
+       }
+
+       function attached() {
+         this.loadResources(this.resolveUrl('locales.json'));
+       }
+     }
+     customElements.define('sample-element', SampleElement);
+
+ @demo demo/index.html
+ @polymerBehavior Polymer.AppLocalizeBehavior
  */
 export const AppLocalizeBehavior = {
   /**
-   * Internal singleton cache. This is the private implementation of the
-   * behaviour; don't interact with it directly.
+   Internal singleton cache. This is the private implementation of the
+   behaviour; don't interact with it directly.
    */
   __localizationCache: {
     requests: {}, /* One iron-request per unique resources path. */
@@ -145,43 +143,43 @@ export const AppLocalizeBehavior = {
   },
 
   /**
-   * Fired after the resources have been loaded.
+   Fired after the resources have been loaded.
    *
-   * @event app-localize-resources-loaded
+   @event app-localize-resources-loaded
    */
 
   /**
-   * Fired when the resources cannot be loaded due to an error.
+   Fired when the resources cannot be loaded due to an error.
    *
-   * @event app-localize-resources-error
+   @event app-localize-resources-error
    */
 
   properties: {
     /**
-     * The language used for translation.
+     The language used for translation.
      */
     language: {type: String},
 
     /**
-     * The dictionary of localized messages, for each of the languages that
-     * are going to be used. See http://formatjs.io/guides/message-syntax/ for
-     * more information on the message syntax.
+     The dictionary of localized messages, for each of the languages that
+     are going to be used. See http://formatjs.io/guides/message-syntax/ for
+     more information on the message syntax.
      *
-     * For example, a valid dictionary would be:
-     * this.resources = {
-     *  'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
-     * }
+     For example, a valid dictionary would be:
+     this.resources = {
+      'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
+     }
      */
     resources: {type: Object},
 
     /**
-     * Optional dictionary of user defined formats, as explained here:
-     * http://formatjs.io/guides/message-syntax/#custom-formats
+     Optional dictionary of user defined formats, as explained here:
+     http://formatjs.io/guides/message-syntax/#custom-formats
      *
-     * For example, a valid dictionary of formats would be:
-     * this.formats = {
-     *    number: { USD: { style: 'currency', currency: 'USD' } }
-     * }
+     For example, a valid dictionary of formats would be:
+     this.formats = {
+        number: { USD: { style: 'currency', currency: 'USD' } }
+     }
      */
     formats: {
       type: Object,
@@ -192,15 +190,15 @@ export const AppLocalizeBehavior = {
     },
 
     /**
-     * If true, will use the provided key when
-     * the translation does not exist for that key.
+     If true, will use the provided key when
+     the translation does not exist for that key.
      */
     useKeyIfMissing: {type: Boolean, value: false},
 
     /**
-     * Translates a string to the current `language`. Any parameters to the
-     * string should be passed in order, as follows:
-     * `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
+     Translates a string to the current `language`. Any parameters to the
+     string should be passed in order, as follows:
+     `localize(stringKey, param1Name, param1Value, param2Name, param2Value)`
      */
     localize: {
       type: Function,
@@ -208,7 +206,7 @@ export const AppLocalizeBehavior = {
     },
 
     /**
-     * If true, will bubble up the event to the parents
+     If true, will bubble up the event to the parents
      */
     bubbleEvent: {type: Boolean, value: false}
   },
@@ -249,7 +247,7 @@ export const AppLocalizeBehavior = {
   },
 
   /**
-   * Returns a computed `localize` method, based on the current `language`.
+   Returns a computed `localize` method, based on the current `language`.
    */
   __computeLocalize: function(language, resources, formats) {
     var proto = this.constructor.prototype;

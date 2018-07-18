@@ -51,16 +51,16 @@ class SampleElement extends  extends mixinBehaviors([AppLocalizeBehavior], Polym
     return html`
       <div>{{localize('hello', 'name', 'Batman')}}</div>
     `;
+  }
 
-    static get properties() {
-      return {
-        language: { value: 'en' },
-      }
+  static get properties() {
+    return {
+      language: { value: 'en' },
     }
+  }
 
-    function attached() {
-      this.loadResources(this.resolveUrl('locales.json'));
-    }
+  function attached() {
+    this.loadResources(this.resolveUrl('locales.json'));
   }
 }
 customElements.define('sample-element', SampleElement);
