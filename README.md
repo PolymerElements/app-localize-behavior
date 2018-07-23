@@ -46,7 +46,7 @@ import {PolymerElement, html} from '@polymer/polymer';
 import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
 import {AppLocalizeBehavior} from '@polymer/app-localize-behavior/app-localize-behavior.js';
 
-class SampleElement extends  extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
+class SampleElement extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
   static get template() {
     return html`
       <div>{{localize('hello', 'name', 'Batman')}}</div>
