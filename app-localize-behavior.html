@@ -173,6 +173,11 @@ Polymer.AppLocalizeBehavior = {
      * this.resources = {
      *  'en': { 'greeting': 'Hello!' }, 'fr' : { 'greeting': 'Bonjour!' }
      * }
+     * With namespace multi level :
+     this.resources = {
+     *  'en': { 'login': {'greeting': 'Hello!' }}, 'fr' : { 'login': {'greeting': 'Bonjour!' }}
+     * }
+     * use with ":" separator eg : localize('login:greeting')
      */
     resources: {
       type: Object
@@ -277,7 +282,20 @@ Polymer.AppLocalizeBehavior = {
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
-      var translatedValue = resources[language][key];
+      var subKey = key.split(":");
+      if (subKey.length > 1) {
+        // use namesSpace multi level
+        var translatedValue = resources[language][subKey[0]];
+        for (var i=1; i<subKey.length; i++) {
+            if (translatedValue) {
+                translatedValue = translatedValue[subKey[i]];
+            } else {
+                break;
+            }
+        }
+      } else {
+        var translatedValue = resources[language][key];
+      }
 
       if (!translatedValue) {
         return this.useKeyIfMissing ? key : '';
