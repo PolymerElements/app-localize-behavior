@@ -10,6 +10,8 @@ found at http://polymer.github.io/PATENTS.txt
 */
 import '@polymer/polymer/polymer-legacy.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import IntlMessageFormat from 'intl-messageformat/src/main.js';
+window.IntlMessageFormat = IntlMessageFormat;
 
 // This isn't a complete `Object.assign` polyfill, but this element expects
 // JSON and doesn't provide more than one source object.
@@ -25,14 +27,14 @@ var assign =
     };
 
 /**
- `Polymer.AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/)
+ `AppLocalizeBehavior` wraps the [format.js](http://formatjs.io/)
  library to help you internationalize your application. Note that if you're on
  a browser that does not natively support the
  [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
  object, you must load the polyfill yourself. An example polyfill can
  be found [here](https://github.com/andyearnshaw/Intl.js/).
 
- `Polymer.AppLocalizeBehavior` supports the same
+ `AppLocalizeBehavior` supports the same
  [message-syntax](http://formatjs.io/guides/message-syntax/) of format.js, in
  its entirety; use the library docs as reference for the available message
  formats and options.
@@ -42,7 +44,7 @@ var assign =
      import {PolymerElement, html} from '@polymer/polymer';
      import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
      import {AppLocalizeBehavior} from
- '@polymer/app-localize-behavior/app-localize-behavior.js';
+         '@polymer/app-localize-behavior/app-localize-behavior.js';
 
      class SampleElement extends  extends mixinBehaviors(
          [AppLocalizeBehavior], PolymerElement) {
@@ -98,7 +100,7 @@ var assign =
      import {PolymerElement, html} from '@polymer/polymer';
      import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
      import {AppLocalizeBehavior} from
- '@polymer/app-localize-behavior/app-localize-behavior.js';
+         '@polymer/app-localize-behavior/app-localize-behavior.js';
 
      class SampleElement extends  extends mixinBehaviors(
          [AppLocalizeBehavior], PolymerElement) {
@@ -128,7 +130,7 @@ var assign =
      customElements.define('sample-element', SampleElement);
 
  @demo demo/index.html
- @polymerBehavior Polymer.AppLocalizeBehavior
+ @polymerBehavior AppLocalizeBehavior
  */
 export const AppLocalizeBehavior = {
   /**
@@ -144,13 +146,11 @@ export const AppLocalizeBehavior = {
 
   /**
    Fired after the resources have been loaded.
-   *
    @event app-localize-resources-loaded
    */
 
   /**
    Fired when the resources cannot be loaded due to an error.
-   *
    @event app-localize-resources-error
    */
 

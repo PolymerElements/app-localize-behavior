@@ -23,9 +23,6 @@ npm install --save @polymer/app-localize-behavior
 ```html
 <html>
   <head>
-    <!-- You MUST import this library first for the behaviour to work -->
-    <script src="../node_modules/intl-messageformat/dist/intl-messageformat.js"></script>
-
     <!-- Optional: Intl polyfill -->
     <script src="https://unpkg.com/intl@1.2.5/dist/Intl.min.js"></script>
     <script src="https://unpkg.com/intl@1.2.5/locale-data/jsonp/en.js"></script>
@@ -65,14 +62,7 @@ class SampleElement extends mixinBehaviors([AppLocalizeBehavior], PolymerElement
 }
 customElements.define('sample-element', SampleElement);
 ```
-## Changes in 3.0
-If you've used this element in previous versions, the only notable change is that now
-you **must** include the `IntlMessageFormat` library yourself -- this is because
-it is an older library that was not written in a module-friendly way, and cannot
-be used inside of a ES module (since it uses the `this` object, which is
-not defined).
 
-This is shown both in the code snippet above, and the [demo](https://github.com/PolymerElements/app-localize-behavior/blob/master/demo/index.html).
 ## Contributing
 If you want to send a PR to this element, here are
 the instructions for running the tests and demo locally:
