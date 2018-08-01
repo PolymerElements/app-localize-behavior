@@ -16,15 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-    <script type="module" src="../../paper-styles/typography.js"></script>
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2.0.0/webcomponents-loader.js"></script>
+
+    <!-- Optional: Intl polyfill -->
+    <script src="https://unpkg.com/intl@1.2.5/dist/Intl.min.js"></script>
+    <script src="https://unpkg.com/intl@1.2.5/locale-data/jsonp/en.js"></script>
+    <script src="https://unpkg.com/intl@1.2.5/locale-data/jsonp/fr.js"></script>
+
+    <!-- Demo elements -->
     <script type="module" src="./x-translate.js"></script>
     <script type="module" src="./x-local-translate.js"></script>
-
-    <!-- Intl polyfill -->
-    <script src="../../../intl/dist/Intl.min.js"></script>
-    <script src="../../../intl/locale-data/jsonp/en.js"></script>
-    <script src="../../../intl/locale-data/jsonp/fr.js"></script>
   </head>
 
   <body unresolved>
