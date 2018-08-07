@@ -1,0 +1,10 @@
+{
+  "removeReferences": [
+    "../intl-messageformat/dist/intl-messageformat.min.d.ts"
+  ],
+  "addReferences": {
+    "app-localize-behavior.d.ts": [
+      "extra-types.d.ts"
+    ]
+  }
+}
