@@ -69,6 +69,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="missing-locale">
+    <template>
+      <x-translate use-key-if-missing></x-translate>
+    </template>
+  </test-fixture>
   <script>
     function getRequestsCache(elem) {
       return elem.constructor.prototype.__localizationCache.requests;
@@ -166,6 +171,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app.language = 'fake';
 
         assert.equal(app.localize('greeting'), undefined);
+      });
+
+      test('can handle missing keys and missing locale', function() {
+        var app = fixture('missing-locale');
+
+        assert.equal(app.language, 'en');
+        assert.equal(app.$.missing.innerHTML, 'missing');
+
+        app.language = 'bg';
+        assert.equal(app.language, 'bg');
+        assert.equal(app.$.missing.innerHTML, 'missing');
       });
     });
 
