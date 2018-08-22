@@ -31,8 +31,7 @@ Polymer({
       value: function() {
         return {
           'en': {'intro': 'my name is {name}. i have {numCats, number} cats.'},
-          'fr':
-              {'intro': 'je m\'apelle {name}. j\'ai {numCats, number} chats.'}
+          'fr': {'intro': 'je m\'apelle {name}. j\'ai {numCats, number} chats.'}
         };
       }
     }

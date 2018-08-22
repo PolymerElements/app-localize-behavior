@@ -29,7 +29,11 @@ Polymer({
     formats: {
       type: Object,
       value: function() {
-        return {number: {USD: {style: 'currency', currency: 'USD'}}};
+        return {
+          number: {
+            USD: {style: 'currency', currency: 'USD', minimumFractionDigits: 2}
+          }
+        };
       }
     },
     resources: {

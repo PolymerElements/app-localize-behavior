@@ -1,3 +1,5 @@
 bower_components*
 bower-1.x.json
 node_modules
+*.d.ts
+*.tgz
