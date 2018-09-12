@@ -18,7 +18,7 @@
   "author": "The Polymer Authors",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@polymer/iron-ajax": "^3.0.0-pre.24",
+    "@polymer/iron-ajax": "^3.0.0-pre.25",
     "@polymer/polymer": "^3.0.0",
     "intl-messageformat": "^2.2.0"
   },
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "intl": "^1.2.0",
-    "@polymer/paper-toggle-button": "^3.0.0-pre.24",
-    "@polymer/paper-styles": "^3.0.0-pre.24",
+    "@polymer/paper-toggle-button": "^3.0.0-pre.25",
+    "@polymer/paper-styles": "^3.0.0-pre.25",
     "wct-browser-legacy": "^1.0.1",
     "webmat": "^0.2.0",
     "@webcomponents/webcomponentsjs": "^2.0.0",
