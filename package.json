@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/polymerelements/app-localize-behavior",
   "name": "@polymer/app-localize-behavior",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "app-localize-behavior.js",
   "author": "The Polymer Authors",
   "license": "BSD-3-Clause",
