@@ -261,10 +261,14 @@ export const AppLocalizeBehavior = {
     }
     proto.__localizationCache.messages = {};
 
-    return function() {
+    return function localize() {
       var key = arguments[0];
       if (!key || !resources || !language || !resources[language])
         return;
+
+      if (Array.isArray(key)) {
+        return localize.apply(null, key);
+      }
 
       // Cache the key/value pairs for the same language, so that we don't
       // do extra work if we're just reusing strings across an application.
