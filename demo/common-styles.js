@@ -9,12 +9,12 @@ part of the polymer project is also subject to an additional IP rights grant
 found at http://polymer.github.io/PATENTS.txt
 */
 
-import '@polymer/polymer/polymer-legacy.js';
 import '@polymer/paper-styles/shadow.js';
 import '@polymer/paper-styles/typography.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
-const template = html`
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `
 <dom-module id="common-styles">
   <template>
     <style>
@@ -60,6 +60,7 @@ const template = html`
       }
     </style>
   </template>
-</dom-module>`;
-template.setAttribute('style', 'display: none;');
-document.head.appendChild(template.content);
+</dom-module>
+`;
+
+document.head.appendChild($_documentContainer.content);
