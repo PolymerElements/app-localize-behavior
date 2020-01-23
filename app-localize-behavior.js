@@ -10,7 +10,7 @@ found at http://polymer.github.io/PATENTS.txt
 */
 import '@polymer/polymer/polymer-legacy.js';
 import '@polymer/iron-ajax/iron-ajax.js';
-import IntlMessageFormat from 'intl-messageformat/src/main.js';
+import IntlMessageFormat from 'intl-messageformat';
 window.IntlMessageFormat = IntlMessageFormat;
 
 // This isn't a complete `Object.assign` polyfill, but this element expects
